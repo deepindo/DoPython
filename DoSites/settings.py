@@ -161,10 +161,10 @@ SIMPLEUI_DEFAULT_THEME = 'Green.css'
 SIMPLEUI_DEFAULT_ICON = False
 SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
 SIMPLEUI_HOME_INFO = False
-SIMPLEUI_HOME_QUICK = False
-SIMPLEUI_HOME_ACTION = False
+SIMPLEUI_HOME_QUICK = True
+SIMPLEUI_HOME_ACTION = True
 SIMPLEUI_ANALYSIS = False
-SIMPLEUI_LOGIN_PARTICLES = False
+SIMPLEUI_LOGIN_PARTICLES = True
 SIMPLEUI_ICON = {
     '公司简介': 'fas fa-building',
     '荣誉资质': 'fas fa-trophy',
@@ -183,6 +183,10 @@ SIMPLEUI_CONFIG = {
     # 'menu_display': ['Simpleui', '测试', '权限认证', '动态菜单测试'],      # 开启排序和过滤功能, 不填此字段为默认排序和全部显示, 空列表[] 为全部不显示.
     'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
     'menus': [{
+        'name': 'TDesign',
+        'icon': 'fas fa-code',
+        'url': 'https://tdesign.tencent.com/vue/components/getting-started'
+    }, {
         'name': 'Simpleui',
         'icon': 'fas fa-code',
         'url': 'https://gitee.com/tompeppa/simpleui'
@@ -221,7 +225,7 @@ SIMPLEUI_CONFIG = {
             'icon': 'fab fa-github'
         }]
     }, {
-        'name': '动态菜单测试' ,
+        'name': '动态菜单测试',
         'icon': 'fa fa-desktop',
         'models': [{
             'name': time.time(),
