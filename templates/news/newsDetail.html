@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}
+    苍玄天_新闻动态
+{% endblock %}
+
+{% block content %}
+    <!--主体部分-->
+    <div class="container">
+        <div class="model-details-product-title">
+            {{ news_item.title }}
+            <div class="model-foot">发布时间：{{ news_item.publish_date }}&nbsp;&nbsp;&nbsp;浏览量：{{ news_item.news_view }}</div>
+
+        </div>
+        <div class="model-details">
+            {{ news_item.news_description | safe }}
+        </div>
+    </div>
+
+{% endblock %}

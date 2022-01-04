@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    苍玄天_科研基地
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <img src="{% static 'img/science.jpg' %}" alt="" class="img-responsive">
+        </div>
+    </div>
+    <div class="container">
+        <div class="model-details-title">
+            科研基地介绍
+        </div>
+        <div class="model-details">
+            <p>近二十年来，苍玄天致力打造“志存高远，一诺千钧”的企业文化，不断吸纳和培养人工智能高精尖人才，
+                逐步形成了一支技术过硬、乐于钻研、勇于创新的核心技术团队。目前，恒达科研基地分为计算机视觉、
+                机器人和视觉深度学习三个事业部，已为恒达在人脸识别、物联网平台搭建、机器人导航等高新算法
+                和模型研究领域打下了坚实基础。未来，恒达将继续坚定不移地投入科研，持续做好团队结构优化
+                和技术创新升级，力争实现引领全球人工智能发展的未来愿景。
+            </p>
+            <img class="img-responsive" style="max-width:700px;" src="/static/img/kyjd.jpg">
+            <h3>研究方向</h3>
+            <h5>机器人导航：</h5>
+            <p>
+                多传感器路径规划、物联网一体化平台、远程人机交互、强化学习控制。
+            </p>
+            <h5>人体行为识别：</h5>
+            <p>
+                单用户行为识别、人体骨骼大数据分析、鲁棒特征抽取、多用户行为识别。
+            </p>
+            <h5>人脸属性识别：</h5>
+            <p>
+                人脸检测、属性分析、行人再识别。
+            </p>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    苍玄天_产品中心
+{% endblock %}
+
+{% block content %}
+    {#    <link href="{% static 'products.css' %}" rel="stylesheet">#}
+    <div class="container-fluid">
+        <div class="row">
+            <img src="{% static 'img/products.jpg' %}" alt="" class="img-responsive model-img">
+        </div>
+    </div>
+    <!--主体内容-->
+    <div class="container">
+        <div class="row row-3">
+            <!--侧边栏-->
+            <div class="col-md-3">
+                <div class="model-title">
+                    产品中心
+                </div>
+                <div class="model-list">
+                    <ul class="list-group">
+                        <li class="list-group-item" id="robot">
+                            <a href="{% url 'products:productList' 'robot' %}">家用机器人</a>
+                        </li>
+                        <li class="list-group-item" id="monitor">
+                            <a href="{% url 'products:productList' 'monitor' %}">智能门锁</a>
+                        </li>
+                        <li class="list-group-item" id="face">
+                            <a href="{% url 'products:productList' 'face' %}">人脸识别解决方案</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--文字和图片说明-->
+            <div class="col-md-9">
+                <div class="model-details-title">
+                    {{ productName }}
+                </div>
+                <!--列表内容-->
+                <div class="model-details">
+                    {% for product in productList %}
+                        <div class="row">
+                            <!--图片-->
+                            <div class="col-md-6">
+                                <a href="#" class="thumbnail row-4">
+                                    <img src="{{ product.photo.url }}" alt="" class="img-responsive model-img">
+                                </a>
+                            </div>
+                            <!--文字描述-->
+                            <div class="col-md-6">
+                                <h3 class="">{{ product.title | truncatechars:"20" }}</h3>
+                                <p>{{ product.description|truncatechars:"100" }}......</p>
+                                <h3>参考价格</h3>
+                                <div class="price">{{ product.price }}元</div>
+                                <div class="thumbnail row-5">
+
+                                    <div class="caption">
+                                        <a href="{% url 'products:productDetail' product.id %}"
+                                           class="btn btn-primary" role="button">
+                                            查看详情
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    <!--分页-->
+                    {% if pageData %}
+                        <div class="paging">
+                            <ul id="pages" class="pagination pagination-sm pagination-xs">
+                                {% if pageData.first %}
+                                    <li><a href="?page=1">1</a></li>
+                                {% endif %}
+                                {% if pageData.left %}
+                                    {% if pageData.left_has_more %}
+                                        <li><span>...</span></li>
+                                    {% endif %}
+                                    {% for i in pageData.left %}
+                                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                                <li class="active"><a href="?page={{ pageData.page }}">{{ pageData.page }}</a></li>
+                                {% if pageData.right %}
+                                    {% for i in pageData.right %}
+                                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                    {% if pageData.right_has_more %}
+                                        <li><span>...</span></li>
+                                    {% endif %}
+                                {% endif %}
+                                {% if pageData.last %}
+                                    <li><a href="?page={{ pageData.total_pages }}">{{ pageData.total_pages }}</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

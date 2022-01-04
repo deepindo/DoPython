@@ -1,2 +1,1 @@
-# DoPython
-python learning collections
+# DoPy

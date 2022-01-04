@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    苍玄天_荣誉资质
+{% endblock %}
+
+{% block content %}
+    <!-- 广告横幅 -->
+    <div class="container-fluid">
+        <div class="row">
+            <img class="img-responsive model-img" src="{% static 'img/about.jpg' %}">
+        </div>
+    </div>
+    <!-- 主体内容 -->
+    <div class="container">
+        <div class="row row-3">
+            <!-- 侧边导航栏 -->
+            <div class="col-md-3">
+                <div class="model-title">
+                    公司简介
+                </div>
+                <div class="model-list">
+                    <ul class="list-group">
+                        <li class="list-group-item" id="survey">
+                            <a href="{% url 'about:survey' %}">企业概况</a>
+                        </li>
+                        <li class="list-group-item" id="honor">
+                            <a href="{% url 'about:honor' %}">荣誉资质</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 说明文字和图片 -->
+            <div class="col-md-9">
+                <div class="model-details-title">
+                    荣誉资质
+                </div>
+                <div class="row">
+                    {% for award in awards %}
+                        <div class="col-sm-6 col-md-4">
+                            <div class="thumbnail">
+                                <img src="{{award.photo.url}}">
+                                <div class="caption">
+                                    <p>{{award.description}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

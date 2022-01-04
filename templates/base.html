@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}
+
+    {% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="{% static 'products.css' %}" rel="stylesheet">
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+{#导航条#}
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example"
+                    aria-expanded="false">
+                <span>导航条</span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example">
+            <ul class="nav navbar-nav">
+                <li class="nav-top">
+                    <a href="{% url 'home' %}">首页</a>
+                </li>
+                <li class="dropdown nav-top">
+                    <a href="#" class="dropdown-toggle on" data-toggle="dropdown">公司简介</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'about:survey' %}">企业概况</a></li>
+                        <li><a href="{% url 'about:honor' %}">荣誉资质</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown nav-top">
+                    <a href="#" class="dropdown-toggle on" data-toggle="dropdown">新闻动态</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'news:newsList' 'company' %}">公司要闻</a></li>
+                        <li><a href="{% url 'news:newsList' 'industry' %}">行业新闻</a></li>
+                        <li><a href="{% url 'news:newsList' 'notice' %}">通知公告</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown nav-top">
+                    <a href="#" class="dropdown-toggle on" data-toggle="dropdown">产品中心</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'products:productList' 'robot' %}">家用机器人</a></li>
+                        <li><a href="{% url 'products:productList' 'monitor' %}">智能门锁</a></li>
+                        <li><a href="{% url 'products:productList' 'face' %}">人脸识别项目</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown nav-top">
+                    <a href="#" class="dropdown-toggle on" data-toggle="dropdown">服务支持</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'service:download' %}">资料下载</a></li>
+                        <li><a href="{% url 'service:platform' %}">人脸识别开放平台</a></li>
+                    </ul>
+                </li>
+                <li class="nav-top">
+                    <a href="{% url 'science:science' %}">科研基地</a>
+                </li>
+                <li class="dropdown nav-top">
+                    <a href="#" class="dropdown-toggle on" data-toggle="dropdown">人才招聘</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'contact:contact' %}">联系我们</a></li>
+                        <li><a href="{% url 'contact:recruit' %}">加入苍玄</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="line"></div>
+
+{% block content %}
+{% endblock %}
+
+<!-- 页脚 -->
+<div class="container web-footer">
+    <!-- 站点地图 -->
+    <div class="row" id="map-footer">
+        <div class="col-md-2">
+            <dl>
+                <dt>公司简介</dt>
+                <dd><a href="/about/survey/">企业概况</a></dd>
+                <dd><a href="/about/honor/">荣誉资质</a></dd>
+            </dl>
+        </div>
+        <div class="col-md-2">
+            <dl>
+                <dt>产品中心</dt>
+                <dd><a href="/products/productList/robot/">家用机器人</a></dd>
+                <dd><a href="/products/productList/monitor/">智能门锁</a></dd>
+                <dd><a href="/products/productList/face/">人脸识别解决方案</a></dd>
+            </dl>
+        </div>
+        <div class="col-md-2">
+            <dl>
+                <dt>服务支持</dt>
+                <dd><a href="/service/download/">资料下载</a></dd>
+                <dd><a href="/service/platform/">人脸识别开放平台</a></dd>
+            </dl>
+        </div>
+        <div class="col-md-2">
+            <dl>
+                <dt>人才招聘</dt>
+                <dd><a href="/contact/contact/">联系我们</a></dd>
+                <dd><a href="/contact/recruit/">加入苍玄</a></dd>
+            </dl>
+        </div>
+        <div class="col-md-4" id="wx">
+            <p>扫描二维码，关注我们</p>
+            <img class="qrimg" src="/static/img/qr.png" alt="wx">
+            <p>客服热线：<b style="font-size:20px">400 000 0000</b></p>
+        </div>
+    </div>
+    <!-- 版权 -->
+    <div class="row " id="patent-footer">
+        <p class="foot_top"> © 2021 Python Web苍玄天官网开发示例 版权所有 | 粤ICP备19006378号</p>
+    </div>
+</div>
+
+</body>
+
+{#<script>#}
+{#    $(function() {#}
+{#        $(".dropdown").onmouseover(function() {#}
+{#            $(this).addClass("open")#}
+{#        });#}
+{#    });#}
+{#    $(".dropdown").onmouseleave(function() {#}
+{#        $(this).removeClass("open");#}
+{#    });#}
+{#</script>#}
+<script>
+    $(function() {
+        $(".dropdown").mouseover(function() {
+            $(this).addClass("open")
+        });
+    });
+    $(".dropdown").mouseleave(function() {
+        $(this).removeClass("open");
+    });
+</script>
+
+<script type="text/JavaScript">
+    $('#{{active_menu}}').addClass("active");
+</script>
+<script type="text/JavaScript">
+    $('#{{sub_menu}}').addClass("active");
+</script>
+
+</html>

@@ -1,0 +1,563 @@
+
+/*取消小图标的下划线*/
+.ant:link {
+    text-decoration: none;
+}
+
+.ant:visited {
+    text-decoration: none;
+}
+
+.ant:hover {
+    text-decoration: none;
+}
+
+.ant:active {
+    text-decoration: none;
+}
+
+/*导航条默认属性*/
+.navbar-default{
+    margin-bottom: 0px;
+    border: 0px;
+    background-color: #e7e7e7;
+}
+
+
+/* 导航栏栏目激活时属性 */
+.navbar-default .navbar-nav .active a,
+.navbar-default .navbar-nav .active a:hover,
+.navbar-default .navbar-nav .active a:focus {
+    background-color: #005197;
+    /* 背景色设置为深蓝色 */
+    color: #fff;
+    /* 前景文字颜色设置为白色 */
+}
+
+/* 一级菜单鼠标移过时属性 */
+.navbar-default .navbar-nav li a:hover {
+    color: #fff;
+    background-color: #005197;
+}
+
+/* 一级菜单单击展开时属性 */
+.navbar-default .navbar-nav li.open a.on {
+    color: #fff;
+    background-color: #005197;
+
+}
+
+/*下拉菜单*/
+.dropdown-menu{
+    width: auto;
+}
+
+/* 二级菜单标签属性 */
+.dropdown-menu li a {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    color: #777;
+    text-align: center;
+}
+/* 二级菜鼠标移过时属性 */
+.navbar-default .navbar-nav li ul a:hover{
+    color:#fff;
+    background-color:#005197;
+}
+/* 一级菜单激活时二级菜单鼠标移过时属性 */
+.navbar-default .navbar-nav li.active ul a:hover{
+    color:#fff;
+    background-color:#022a4d;
+}
+
+.container{
+    width: 84%;
+    margin: auto;
+}
+.navbar-nav {
+    display: flex;
+    width: 100%;
+}
+.nav-top{
+    text-align: center;
+    width: 14%;
+    flex:1;
+}
+
+.line{
+    height: 1px;
+    width: 100%;
+    background-color: #005197;
+}
+
+.model-details-title{
+    padding: 15px 0;
+    font-size: 24px;
+    border-bottom: 1px #005197 solid;
+    margin-bottom: 10px;
+    color: #005197;
+}
+.model-details p{
+    line-height: 30px;
+    text-indent: 2em;
+    text-align: justify;
+    text-justify: inter-ideograph;
+}
+.model-details img{
+    margin: 0px auto;
+}
+.model-details h3{
+    color: #005197;
+    font-size: 20px;
+}
+.model-details h5{
+    font-size: 15px;
+    color: #005197;
+}
+
+/*-------------页脚------------*/
+.web-footer{
+    width:100%;        /* 占满整个浏览器宽度 */
+    margin-top:30px;   /* 设置与上边缘距离 */
+}
+
+#map-footer{
+    background-color:#3A3A3A;        /* 对整个站点地图设置背景色灰色 */
+    height:auto;
+}
+#map-footer dl{
+    text-align:center;               /* 站点链接文字对齐 */
+    margin-top:15px;                 /* 设置表格与上边缘边距 */
+}
+#map-footer dt{
+    padding:3px;                     /* 表格标题内边距为3像素 */
+    color:#fff;                      /* 表格标题颜色为白色 */
+}
+#map-footer dd{
+    padding:3px;                     /* 表格内容内边距为3像素 */
+}
+
+/* 二维码广告段落 */
+#map-footer p{
+    margin-top:15px;
+    margin-bottom:10px;
+    color:#fff;
+    font-size:16px;
+}
+#map-footer a{
+    color:#A6A6A6;                   /* 站点链接文字颜色设置 */
+    font-size:13px;                  /* 站点链接文字大小 设置 */
+}
+#map-footer a:hover{
+    color:#fff;
+    text-decoration:none;             /* 去除站点链接鼠标移过时出现的下划线 */
+}
+#wx{
+    text-align:center;                /* 二维码居中对齐 */
+}
+.qrimg{
+    max-width: 120px;                 /* 二维码最大宽度为170像素 */
+}
+
+/*-------------尾部版权------------*/
+#patent-footer{
+    text-align:center;
+    background-color:#3A3A3A;
+}
+#patent-footer p{
+    padding-right:80px;
+    color:#8d8d8d;
+    font-size:11px;
+}
+.foot_top{
+    margin-bottom: 30px;
+}
+
+/*公司简介*/
+/*-------------主体------------*/
+/* 主题标题 */
+.model-details-title{
+    padding:15px 0px;
+    font-size:18px;
+    border-bottom:1px #005197 solid; /* 底部添加蓝色边框 */
+    color:#005197;
+    margin-bottom:10px;
+    margin-top:10px;
+}
+/* 文字段落 */
+.model-details p{
+    line-height:30px;
+    text-indent:2em;
+    text-align:justify;
+    text-justify:inter-ideograph;
+}
+/* 主体图像 */
+.model-details img{
+    margin:0px auto;
+}
+
+/* 侧边导航栏 */
+.row-3{
+    margin-top:30px; /* 设置顶部边距 */
+}
+
+/*侧边导航栏标题样式*/
+.model-title {
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+    padding: 15px 0px;
+    background: #005197;
+    margin-top: 25px;
+}
+/*侧边导航栏列表项样式*/
+.model-list li{
+    text-align:center;
+    background-color:#f6f6f6;
+    font-size:16px;
+}
+/*侧边导航栏列表项链接样式*/
+.model-list li a{
+    color:#545353;
+}
+/*侧边导航栏列表项链接激活样式*/
+.model-list li a:hover{
+    text-decoration:none;
+    color:#005197;
+}
+
+/*侧边导航栏激活样式*/
+.model-list li.active{
+    text-align:center;
+    background-color:#f6f6f6;
+    font-size:16px;
+    border-color: #ddd;
+}
+/*侧边导航栏激活状态下鼠标移过时样式*/
+.model-list li.active:hover{
+    text-align:center;
+    background-color:#f6f6f6;
+    font-size:16px;
+    border-color: #ddd;
+}
+
+/*侧边导航栏激活状态时链接样式*/
+.model-list li.active a {
+    color: #005197;
+}
+
+
+/*新闻动态*/
+.model-details .news-model{
+    margin-top: 15px;
+}
+.news-model span{
+    float: right;
+}
+.news-btn{
+    text-align: center;
+}
+.news-model a:hover, .news-model a:focus{
+    text-decoration: none;
+    color: #d30a1c;
+}
+.model-details-title span{
+    font-size: 20px;
+    font-weight: bold;
+}
+.model-details-title-search{
+    font-size: 18px;
+    width: 300px;
+    float: right;
+    margin-bottom: 20px;
+}
+.model-foot{
+    color: #545353;
+    margin: 10px 0;
+    font-size: 14px;
+    padding: 5px 0;
+    text-align: center;
+}
+
+/*搜索页面*/
+.news-search-model span{
+    float: none;
+}
+.news-model a span{
+    float: none;
+}
+.highlighted{
+    color: red;
+}
+
+
+/**人才招聘**/
+
+.contact-left h1 strong {
+    display: block;
+    color: #777777;
+    font-size: 1.6em;
+}
+
+.contact-left h1 span {
+    display: block;
+}
+
+.contact-left ul{
+    padding: 0;
+}
+
+.contact-left li {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    color: #777777;
+    margin-top: 17px;
+}
+
+.contact-left li a{
+    color: #777777;
+}
+
+
+/*人才招聘*/
+/* 欢迎咨询页面样式 */
+.contact-left h1 strong {
+    display: block;
+    color: #777;
+    font-size: 1.6rem;
+}
+.contact-left h1 span {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 10px;
+}
+.contact-left ul {
+    padding: 0;
+}
+.contact-left li {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    color: #777;
+    margin-top: 17px;
+}
+.contact-left li a {
+    color: #777;
+}
+
+/* 手风琴折叠面板样式 */
+#accordion a:hover,a:focus{
+    text-decoration: none;
+    outline: none;
+}
+#accordion{
+    padding-right: 24px;
+    padding-left: 24px;
+    z-index: 1;
+}
+#accordion .panel{
+    border: none;
+    box-shadow: none;
+}
+#accordion .panel-heading{
+    padding: 0;
+    border-radius: 0;
+    border: none;
+}
+#accordion .panel-title{
+    padding: 0;
+}
+#accordion .panel-title a{
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    background: #005197;
+    color: #fff;
+    padding: 15px 25px;
+    position: relative;
+    margin-left: -24px;
+    transition: all 0.3s ease 0s;
+}
+#accordion .panel-title a.collapsed{
+    background: #2e516d;
+    color: #fff;
+    margin-left: 0;
+    transition: all 0.3s ease 0s;
+}
+#accordion .panel-title a:before{
+    content: "";
+    border-left: 24px solid #005197;
+    border-top: 24px solid transparent;
+    border-bottom: 24px solid transparent;
+    position: absolute;
+    top: 0;
+    right: -24px;
+    transition: all 0.3s ease 0s;
+}
+#accordion .panel-title a.collapsed:before{
+    border-left-color: #2e516d;
+}
+#accordion .panel-title a:after{
+    content: "\e133";
+    font-family: 'Glyphicons Halflings';
+    position: absolute;
+    top: 30%;
+    right: 15px;
+    font-size: 18px;
+    color: #fff;
+
+}
+#accordion .panel-title a.collapsed:after{
+    content: "\e134";
+    color: #fff;
+}
+#accordion .panel-collapse{
+    position: relative;
+}
+#accordion .panel-collapse.in:before{
+    content: "";
+    border-right: 24px solid rgb(146, 143, 143);
+    border-bottom: 18px solid transparent;
+    position: absolute;
+    top: 0;
+    left: -24px;
+}
+#accordion .panel-body{
+    font-size: 14px;
+    color: #333;
+    background: #e4e4e4;
+    border-top: none;
+    z-index: 1;
+}
+
+
+/*首页*/
+.part1{
+    font-size:22px;
+}
+.part1 a{
+    text-decoration:none;
+    color:#666;
+}
+.en{
+    color:#828282;
+    font-size:15px;
+}
+.line1{
+    height:3px;
+    background:#d0d0d0;
+    width:100%;
+    margin-bottom:8px
+}
+.line2{
+    height:3px;
+    background: #005197;
+    width:94px;
+}
+.text1{
+    text-align:justify;
+    font-size:13px;
+    line-height:25px;
+    color:#505050;
+    margin-top:5px;
+}
+
+/*新闻中心*/
+.carousel {
+    margin-bottom: 40px;
+}
+.carousel .item {
+    background-color: #000;
+}
+.carousel .nav-point{
+    bottom:-14px;
+}
+.carousel .nav-title{
+    font-size:12px;
+    bottom:-14px;
+}
+.carousel .item img {
+    width: 100%;
+}
+.carousel-caption {
+    z-index: 10;
+}
+.carousel-caption p {
+    margin-bottom: 20px;
+    font-size: 20px;
+    line-height: 1.8;
+}
+.more-btn{
+    float:right;
+    margin-top:7px;
+    color:#828282;
+    font-size:11px;
+}
+.list-new li{
+    border-bottom:1px dashed #eae7e7;
+    line-height:40px;
+}
+.list-new a{
+    text-decoration:none;
+    color:#666;
+    font-size:13px;
+}
+.list-new a:hover{
+    color:#d30a1c;
+}
+.list-new span{
+    float:right;
+    font-size:12px;
+}
+.list-new .public-detail{
+    float:right;
+    color:#d30a1c;
+}
+
+/* 联系我们 */
+.procurement-li{
+    line-height:35px;
+    color:#666;
+    font-size:13px;
+}
+.procurement-li a{
+    text-decoration:none;
+    color:#666;
+}
+.platform{
+    width:100%;
+    height:45px;
+    background:#eae7e7;
+    color:#fff;
+    text-align:center;
+    font-size:17px;
+    line-height:42px;
+}
+.platform a{
+    text-decoration:none;
+    color:#666;
+}
+.platform a:hover{
+    color:#d30a1c;
+}
+
+/* 产品中心 */
+.pro-images{
+    background-color:#f6f6f6;
+}
+.thumbnail{
+    margin-bottom:0px;
+}
+.col-pro{
+    background-color:#F6F6F6;
+    padding-top:15px;
+}
+
+
+
+
+
+
+

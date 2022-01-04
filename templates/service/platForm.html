@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    人脸识别开放平台
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/codemirror.css' %}">
+    <script src="{% static 'js/codemirror.js' %}"></script>
+    <script src="{% static 'js/python.js' %}"></script>
+    <style type="text/css">
+        .CodeMirror {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+    </style>
+    <!-- 广告横幅 -->
+    <div class="container-fluid">
+        <div class="row">
+            <img class="img-responsive model-img" src="{% static 'img/service.jpg' %}">
+        </div>
+    </div>
+    <!-- 主体内容 -->
+    <div class="container">
+        <div class="row row-3">
+            <!-- 侧边导航栏 -->
+            <div class="col-md-3">
+                <div class="model-title">
+                    服务支持
+                </div>
+                <div class="model-list">
+                    <ul class="list-group">
+                        <li class="list-group-item" id='download'>
+                            <a href="{% url 'service:download' %}">资料下载</a>
+                        </li>
+                        <li class="list-group-item" id='platform'>
+                            <a href="{% url 'service:platform' %}">人脸识别开放平台</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 说明文字和图片 -->
+            <div class="col-md-9">
+                <div class="model-details-title">
+                    人脸识别接口文档
+                </div>
+                <div class="model-details">
+                    <h3>一. 体验产品</h3>
+                    </br>
+                    <!-- 按钮触发模态框 -->
+                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                        人脸检测
+                    </button>
+                    <!-- 模态框（Modal） -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        在线人脸检测
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <img id="photoIn" src="{% static 'img/sample.png' %}" class="img-responsive"
+                                         style="max-width:250px">
+                                    <input type="file" id="photo" name="photo" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                    </button>
+                                    <button type="button" id="compute" class="btn btn-primary">
+                                        开始检测
+                                    </button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+                    <script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+                    <script>
+                        $(function () {
+                            $('#photo').on('change', function () {
+                                var r = new FileReader();
+                                f = document.getElementById('photo').files[0];
+                                r.readAsDataURL(f);
+                                r.onload = function (e) {
+                                    document.getElementById('photoIn').src = this.result;
+                                };
+                            });
+                        });
+                    </script>
+                    <script>
+                        $('#compute').click(function () {
+                            formdata = new FormData();
+                            var file = $("#photo")[0].files[0];
+                            formdata.append("image", file);
+                            $.ajax({
+                                url: '/serviceApp/facedetectDemo/', // 调用Django服务器计算函数
+                                type: 'POST', // 请求类型
+                                data: formdata,
+                                dataType: 'json', // 期望获得的响应类型为json
+                                processData: false,
+                                contentType: false,
+                                success: ShowResult // 在请求成功之后调用该回调函数输出结果
+                            })
+                        })
+                    </script>
+                    <script>
+                        function ShowResult(data) {
+                            var v = data['img64'];
+                            document.getElementById('photoIn').src = "data:image/jpeg;base64, " + v;
+                        }
+                    </script>
+                    <h3>二. API接口说明</h3>
+                    </br>
+                    <h4><strong>基本信息：</strong></h4>
+                    <p>
+                        请求类型：HTTP/HTTPS。请求方式：POST
+                    </p>
+                    <p>
+                        接口地址：http://myhengda.cn/serviceApp/facedetect/
+                    </p>
+                    </br>
+                    <h4><strong>接口描述：</strong></h4>
+                    <p>
+                        人脸检测，此接口多用于调用人脸识别、人脸比对的接口之前，用于从图像数据中检测出人脸区域，并以
+                        矩形框形式返回人脸检测结果。目前该接口仅供测试使用，调用该接口暂时不限制调用次数。
+                    </p>
+
+                    </br>
+                    <h4><strong>本地调用示例：</strong></h4>
+
+                    <div><textarea id="code" name="code">
+    import cv2, requests
+    # web地址(http://localhost:8000)+访问接口（facedetect）
+    url = "http://localhost:8000/serviceApp/facedetect/"
+
+    # 上传图像并检测
+    tracker = None
+    imgPath = "face.jpg"  #图像路径
+    files = {
+        "image": ("filename2", open(imgPath, "rb"), "image/jpeg"),
+    }
+
+    req = requests.post(url, data=tracker, files=files).json()
+    print("获取信息: {}".format(req))
+
+    # 将检测结果框显示在图像上
+    img = cv2.imread(imgPath)
+    for (w, x, y, z) in req["faces"]:
+        cv2.rectangle(img, (w, x), (y, z), (0, 255, 0), 2)
+
+    cv2.imshow("face detection", img)
+    cv2.waitKey(0)
+                </textarea></div>
+                    </br>
+                    <h4><strong>调用结果：</strong></h4>
+                    <img class="img-responsive" style="max-width:200px;" src="{% static 'img/facedetect.png' %}">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: {
+                name: "python",
+                version: 3,
+                singleLineStringErrors: false
+            },
+            lineNumbers: true,
+            indentUnit: 4,
+            tabMode: "shift",
+            matchBrackets: true
+        });
+    </script>
+{% endblock %}

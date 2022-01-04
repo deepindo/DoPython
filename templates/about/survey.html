@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    苍玄天_企业概况
+{% endblock %}
+
+{% block content %}
+    <!-- 广告横幅 -->
+    <div class="container-fluid">
+        <div class="row">
+            <img class="img-responsive model-img" src="{% static 'img/about.jpg' %}">
+        </div>
+    </div>
+    <!-- 主体内容 -->
+    <div class="container">
+        <div class="row row-3">
+            <!-- 侧边导航栏 -->
+            <div class="col-md-3">
+                <div class="model-title">
+                    公司简介
+                </div>
+                <div class="model-list">
+                    <ul class="list-group">
+                        <li class="list-group-item" id="survey">
+                            <a href="{% url 'about:survey' %}">企业概况</a>
+                        </li>
+                        <li class="list-group-item" id="honor">
+                            <a href="{% url 'about:honor' %}">荣誉资质</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 说明文字和图片 -->
+            <div class="col-md-9">
+                <div class="model-details-title">
+                    企业概况
+                </div>
+                <div class="model-details">
+                    <div class="row">
+                        <img class="img-responsive" src="{% static 'img/aboutCompany.jpg' %}">
+                    </div>
+                    <p>
+                        恒达科技有限公司，位于科技园内，致力于人脸识别、
+                        行为识别、机器人视觉核心算法研究和产品应用开发,以社会公共安全领域为主要应用方向，
+                        提供极速、准确和防伪装的人脸识别产品，以及人工智能一体化整体解决方案。主营产品：
+                        家用机器人、智能监控、基于人脸和行为识别应用方向的定制开发等服务。
+
+                        恒达科技研发团队来自于国家级研究试验室，该团队为全球最早一批从事人脸识别研究机构之一，
+                        研发团队成员早期主要从事人脸识别和行为识别研究。自2019年发布第一款人脸识别加密核验产品
+                        以来，恒达研发团队进入自主人脸识别实践应用探索阶段。鉴于人脸识别技术逐渐走入工业和民用
+                        应用领域市场，研发团队于2012年成立恒达科技有限公司，正式步入企业市场化运作轨道。
+                        自研发团队成立之始，历经10余年的研究和实践沉淀，最后以恒达科技公司亮相工业和民
+                        用应用领域市场，恒达团队经历了近20年的栉风沐雨和砥砺前行。目前，恒达智能监控、
+                        人脸识别技术的应用和服务涵盖了工业和民用领域。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

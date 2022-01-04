@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    苍玄天_产品详情
+{% endblock %}
+
+{% block content %}
+    <link href="{% static 'products.css' %}" rel="stylesheet">
+    <!--主体部分-->
+    <div class="container">
+        <div class="model-details-product-title">
+            {{ product.title }}
+        </div>
+        <div class="model-details">
+            <div class="row-4">
+                <img src="{{ product.photo.url }}" alt="" class="img-responsive">
+            </div>
+            <!--产品介绍-->
+            <h3>产品介绍</h3>
+            <p>{{ product.description|linebreaks }}</p>
+            <!--参考价格-->
+            <h3>参考价格</h3>
+            <p class="price">{{ product.price }}元</p>
+        </div>
+    </div>
+{% endblock %}

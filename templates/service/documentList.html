@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    苍玄天_资料下载
+{% endblock %}
+
+{% block content %}
+    {#    <link href="{% static 'css/news.css' %}" rel="stylesheet">#}
+    <!-- 广告横幅 -->
+    <div class="container-fluid">
+        <div class="row">
+            <img class="img-responsive model-img" src="{% static 'img/service.jpg' %}">
+        </div>
+    </div>
+    <!-- 主体内容 -->
+    <div class="container">
+        <div class="row row-3">
+            <!-- 侧边导航栏 -->
+            <div class="col-md-3">
+                <div class="model-title">
+                    服务支持
+                </div>
+                <div class="model-list">
+                    <ul class="list-group">
+                        <li class="list-group-item" id='download'>
+                            <a href="{% url 'service:download' %}">资料下载</a>
+                        </li>
+                        <li class="list-group-item" id='platform'>
+                            <a href="{% url 'service:platform' %}">人脸识别开放平台</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 说明文字和图片 -->
+            <div class="col-md-9">
+                <div class="model-details-title">
+                    资料列表
+                </div>
+                <div class="model-details">
+                    {% for doc in docList %}
+                        <div class="news-model">
+                            <img src="{% static 'img/newsicon.gif' %}">
+                            <a href="{% url 'service:getDoc' doc.id %}"><b>{{ doc.title }}</b></a>
+                            <span>【{{ doc.publish_date|date:"Y-m-d" }}】</span>
+                        </div>
+                    {% endfor %}
+
+                    {% if pageData %}
+                        <div class="paging">
+                            <ul id="pages" class="pagination">
+                                {% if pageData.first %}
+                                    <li><a href="?page=1">1</a></li>
+                                {% endif %}
+                                {% if pageData.left %}
+                                    {% if pageData.left_has_more %}
+                                        <li><span>...</span></li>
+                                    {% endif %}
+                                    {% for i in pageData.left %}
+                                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                {% endif %}
+                                <li class="active"><a href="?page={{ pageData.page }}">
+                                    {{ pageData.page }}</a></li>
+                                {% if pageData.right %}
+                                    {% for i in pageData.right %}
+                                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endfor %}
+                                    {% if pageData.right_has_more %}
+                                        <li><span>...</span></li>
+                                    {% endif %}
+                                {% endif %}
+                                {% if pageData.last %}
+                                    <li><a href="?page={{ pageData.total_pages }}">
+                                        {{ pageData.total_pages }}</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

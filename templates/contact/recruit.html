@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    苍玄天_加入我们
+{% endblock %}
+
+{% block content %}
+
+    <script src="{% static 'layDate-v5.2.0/laydate/laydate.js' %}"></script>
+
+    <!-- 广告横幅 -->
+    <div class="container-fluid">
+        <div class="row">
+            <img class="img-responsive model-img" src="{% static 'img/contact.jpg' %}">
+        </div>
+    </div>
+    <!-- 主体内容 -->
+    <div class="container">
+        <div class="row row-3">
+            <!-- 侧边导航栏 -->
+            <div class="col-md-3">
+                <div class="model-title">
+                    人才招聘
+                </div>
+                <div class="model-list">
+                    <ul class="list-group">
+                        <li class="list-group-item" id="contact">
+                            <a href="{% url 'contact:contact' %}">联系我们</a>
+                        </li>
+                        <li class="list-group-item" id="recruit">
+                            <a href="{% url 'contact:recruit' %}">加入苍玄</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 说明文字和图片 -->
+            <div class="col-md-9">
+                <div class="model-details-title">
+                    加入苍玄
+                </div>
+                <div class="model-details">
+                    <div class="panel-group" id="accordion">
+                        {% for ad in AdList %}
+                            <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="panel{{ ad.id }}">
+                                <h4 class="panel-title">
+                                    {% if forloop.first %}
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                           href="#collapse{{ ad.id }}">
+                                    {% else %}
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion"
+                                           href="#collapse{{ ad.id }}">
+                                    {% endif %}
+                                    {{ ad.title }}
+                                    </a>
+                                </h4>
+                            </div>
+                            {% if forloop.first %}
+                                <div id="collapse{{ ad.id }}" class="panel-collapse collapse in">
+                            {% else %}
+                                <div id="collapse{{ ad.id }}" class="panel-collapse collapse">
+                            {% endif %}
+                        <div class="panel-body">
+                            <p>{{ ad.description }}</p>
+                        </div>
+                        </div>
+                        </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            请填写个人简历
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <form action="." name="resumeForm" method="post" class="form-horizontal" role="form"
+                                      enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <!-- 左侧 -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">姓名：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.name|add_class:"form-control"|attr:"placeholder=请填写姓名" }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">身份证号：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.personID|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">性别：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.sex|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">出生日期：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.birth|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">邮箱：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.email|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">学历：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.edu|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">毕业学校：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.school|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">专业：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.major|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">申请职位：</label>
+                                            <div class="col-sm-9">
+                                                {{ resumeForm.position|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 右侧 -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-sm-12" style="text-align:center">
+                                                <img id="profileshow" src="{% static 'img/sample.png' %}"
+                                                     style="width:120px">
+                                            </div>
+                                            <label class="col-sm-5 control-label">上传证件照片：</label>
+                                            {{ resumeForm.photo }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-12 control-label">学习或工作经历：</label>
+                                            <div class="col-sm-12">
+                                                {{ resumeForm.experience|add_class:"form-control" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <center><input type="submit" class="btn btn-primary" onclick="myFunction()" value="提交"/></center>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+        <script>
+            function myFunction() {
+                alert("简历信息已成功上传，初试结果近期会以邮件方式发送至您的邮箱。");
+            }
+        </script>
+
+        <script>
+            laydate.render({
+                elem: '#id_birth'
+            });
+        </script>
+        <script>
+            $(function () {
+                $('#id_photo').on('change', function () {
+                    var r = new FileReader();
+                    f = document.getElementById('id_photo').files[0];
+                    r.readAsDataURL(f);
+                    r.onload = function (e) {
+                        document.getElementById('profileshow').src = this.result;
+                    };
+                });
+            });
+        </script>
+    </div>
+{% endblock %}

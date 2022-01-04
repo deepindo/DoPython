@@ -1,0 +1,32 @@
+
+/*产品中心列表样式*/
+.model-img{
+    width: 100%;
+    height: auto;
+}
+.model-details .row-4 {
+    margin-top: 20px;
+}
+.model-details .row-5{
+    border: none;
+}
+.paging{
+    text-align: center;
+}
+.pagination .ative a{
+    background-color: #005197;
+    border-color: #005197;
+}
+.model-details-product-title{
+    padding: 15px 0px;
+    font-size: 18px;
+    border-bottom: 1px #005197 solid;
+    color: #005197;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+.price{
+    color: red;
+    font-size: 18px;
+}

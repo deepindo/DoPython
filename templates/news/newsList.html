@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    苍玄天_新闻动态
+{% endblock %}
+
+{% block content %}
+
+    <!-- 广告横幅 -->
+    <div class="container-fluid">
+        <div class="row">
+            <img class="img-responsive model-img" src="{% static 'img/new.jpg' %}">
+        </div>
+    </div>
+    <!--主体内容-->
+    <div class="container">
+        <div class="row row-3">
+            <!--侧边栏-->
+            <div class="col-md-3">
+                <div class="model-title">
+                    新闻动态
+                </div>
+                <div class="model-list">
+                    <ul class="list-group">
+                        <li class="list-group-item" id="company">
+                            <a class="link-color" href="{% url 'news:newsList' 'company' %}">企业要闻</a>
+                        </li>
+                        <li class="list-group-item" id="industry">
+                            <a href="{% url 'news:newsList' 'industry' %}">行业新闻</a>
+                        </li>
+                        <li class="list-group-item" id="notice">
+                            <a href="{% url 'news:newsList' 'notice' %}">通知公告</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--文字-->
+            <div class="col-md-9">
+                <div class="model-details-title">
+                    <span>{{ news_name }}</span>
+                    <div class="col-md-7 hidden-xs model-details-title-search">
+{#                        <form method="get" action="{% url 'haystack_search' %}">#}
+{#                            {% csrf_token %}#}
+{#                            <div class="input-group">#}
+{#                                <input type="text" name="q" class="form-control" placeholder="请输入关键词" required/>#}
+{#                                <span class="input-group-btn">#}
+{#                                <input type="submit" class="btn btn-default" value="查询"/>#}
+{#                            </span>#}
+{#                            </div>#}
+{#                        </form>#}
+                    </div>
+                </div>
+                <div class="model-details">
+                    {% for mynew in news_list %}
+                        <div class="news-model"><img src="{% static 'img/newsicon.gif' %}"
+                                                     class="style:width:auto;height:auto;">
+                            <a href="{% url 'news:newsDetail' mynew.id %}"><b>{{ mynew.title }}</b></a>
+                            <span>【{{ mynew.publish_date|date:"Y-m-d" }}】</span>
+                            <p>
+                                <!-- 添加新闻简要说明 -->
+                                {{ mynew.mytxt|truncatechars:"110" }}...
+                            </p>
+                        </div>
+                    {% endfor %}
+                    {# 页码导航 #}
+                    <div class="news-btn">
+                        <div class="pagination row">
+                            <div class="m-auto">
+                            <span class="step-links">
+                                {# 如果不是第一页，则显示上翻按钮 #}
+                                {% if news_list.has_previous %}
+                                    <a href="?page=1"
+                                       class="btn btn-success">
+                                    &laquo;1
+                                    </a>
+                                    <span>...</span>
+                                    <a href="?page={{ news_list.previous_page_number }}"
+                                       class="btn btn-secondary">
+                                    {{ news_list.previous_page_number }}
+                                    </a>
+                                {% endif %}
+                                {# 当前页面 #}
+                                    <span class="current btn btn-danger btn-lg">
+                                        {{ news_list.number }}
+                                    </span>
+                                {# 如果不是末页，则显示下翻按钮 #}
+                                {% if news_list.has_next %}
+                                    <a href="?page={{ newList.next_page_number }}"
+                                       class="btn btn-secondary">
+                                        {{ news_list.next_page_number }}
+                                    </a>
+                                    <span>...</span>
+                                    <a href="?page={{ news_list.paginator.num_pages }}"
+                                       class="btn btn-success">
+                                        {{ news_list.paginator.num_pages }} &raquo;
+                                    </a>
+                                {% endif %}
+                             </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

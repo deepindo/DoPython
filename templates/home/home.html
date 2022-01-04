@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    苍玄天_首页
+{% endblock %}
+{% block content %}
+
+    <!-- 广告横幅 -->
+    <div id="ad" class="carousel slide" data-ride="carousel" data-interval="5000">
+        <ol class="carousel-indicators">
+            <li data-target="#ad" data-slide-to="0" class="active"></li>
+            <li data-target="#ad" data-slide-to="1"></li>
+            <li data-target="#ad" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="item active">
+                <img src="{% static 'img/banner1.jpg' %}" alt="广告横幅1">
+            </div>
+            <div class="item">
+                <img src="{% static 'img/banner2.jpg' %}" alt="广告横幅2">
+            </div>
+            <div class="item">
+                <img src="{% static 'img/banner3.jpg' %}" alt="广告横幅3">
+            </div>
+        </div>
+        <a class="left carousel-control" href="#ad" data-slide="prev"><span
+                class="glyphicon glyphicon-chevron-left"></span></a>
+        <a class="right carousel-control" href="#ad" data-slide="next"><span
+                class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+    <!-- 主体内容 -->
+    <div class="container">
+        <div class="row row-3">
+            <div class="col-md-4">
+                <!-- 企业概况 -->
+                <span class="part1">
+				<a href="{% url 'about:survey' %}">企业概况</a>
+			</span>
+                <span class="part1 en">
+				&nbsp;&nbsp;/ About Us
+			</span>
+                <div class="line1">
+                    <div class="line2 theme"></div>
+                </div>
+                <div style="margin-top:20px;">
+                    <img class="img-responsive" src="{% static 'img/aboutCompany.jpg' %}">
+                    <p class="text1">
+                        恒达科技有限企业，位于中国某高新技术产业开发区,
+                        以社会公共安全领域为主要应用方向，提供极速、准确和防伪装的人脸识别产品。
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <!-- 新闻动态 -->
+                <span class="part1">
+				<a href="#">新闻动态</a>
+			</span>
+                <span class="part1 en">
+				&nbsp;&nbsp;/ News
+			</span>
+                <a class="btn btn-default btn-xs more-btn" href="{% url 'news:newsList' 'company' %}">
+                    +&nbsp;更多
+                </a>
+                <div class="line1">
+                    <div class="line2 theme"></div>
+                </div>
+                <div class="col-md-5">
+                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators nav-point">
+                            {% for post in post_list %}
+                                <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}
+                                    class="active" {% endif %}>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                        <!-- 轮播（Carousel）项目 -->
+                        <div class="carousel-inner" style="margin-top:15px;">
+                            {% for post in postList %}
+                                <div {% if forloop.first %} class="item active" {% else %} class="item" {% endif %}
+                                                            style="background-size:cover;">
+                                    <a href="{% url 'news:newsDetail' post.id %}">
+                                        <img src="{{ post.photo.url }}" class="img-responsive" onload="DrawImage(this)">
+                                    </a>
+                                    <div class="carousel-caption nav-title">{{ post.title }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <ul class="list-unstyled list-new">
+                        {% for mynew in news_list %}
+                            <li>
+                                <a href="{% url 'news:newsDetail' mynew.id %}">
+                                    {{ mynew.title|truncatechars:"15" }}</a>
+                                <span>【{{ mynew.publish_date|date:"Y-m-d" }}】</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row row-3">
+
+            <div class="col-md-4">
+                <!-- 通知公告 -->
+                <span class="part1">
+				<a href="#">通知公告</a>
+			</span>
+                <span class="part1 en">
+				&nbsp;&nbsp;/ Public Release
+			</span>
+                <a class="btn btn-default btn-xs more-btn" href="{% url 'news:newsList' 'notice' %}">
+                    +&nbsp;更多
+                </a>
+                <div class="line1">
+                    <div class="line2 theme"></div>
+                </div>
+                <div>
+                    <img class="img-responsive" src="{% static 'img/note.jpg' %}">
+                    <ul class="list-unstyled list-new">
+                        {% for notice in notice_list %}
+                            <li>
+                                <a href="{% url 'news:newsDetail' notice.id %}">
+                                    {{ notice.title|truncatechars:"25" }}
+                                </a>
+                                <a href="{% url 'news:newsDetail' notice.id %}" class="public-detail">
+                                    查看详情>>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- 科研基地 -->
+                <span class="part1">
+				<a href="{% url 'science:science' %}">科研基地</a>
+			</span>
+                <span class="part1 en">
+				&nbsp;&nbsp;/ Technology Center
+			</span>
+                <div class="line1">
+                    <div class="line2 theme"></div>
+                </div>
+                <div>
+                    <a href="{% url 'science:science' %}">
+                        <img class="img-responsive" src="{% static 'img/ky.jpg' %}">
+                    </a>
+                    <p class="text1">
+                        <font color="#d30a1c">恒达科技科研基地</font>
+                        恒达科研基地分为计算机视觉、 机器人和视觉深度学习三个事业部，共拥有高级研发人员近30名，
+                        以各领域高级工程师和知名院校博士为主体的多层次研发梯队。当前，科研基地优秀的技术团队
+                        已为恒达在人脸识别、物联网平台搭建、机器人导航等 领域打下了坚实基础
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- 联系我们 -->
+                <span class="part1">
+				<a href="{% url 'contact:contact' %}">联系我们</a>
+			</span>
+                <span class="part1 en">
+				&nbsp;&nbsp;/ Contact us
+			</span>
+                <div class="line1">
+                    <div class="line2 theme"></div>
+                </div>
+                <div>
+                    <ul class="list-unstyled procurement-li">
+                        <li>业务质询一：111-XXXXXX</li>
+                        <li>业务质询二：222-XXXXXX</li>
+                        <li>咨询电话：0111-XXXXXX</li>
+                        <li>企业传真：0222-XXXXXX</li>
+                        <li>地址：某某某新区某某大道1号</li>
+                        <li>邮编：XXXXXX</li>
+                        <li>
+                            网址：<a href="http://python3web.com">http://python3web.com</a>
+                        </li>
+                    </ul>
+                    <div class="platform"><a href="{% url 'contact:contact' %}">详情</a></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-3">
+            <!-- 产品中心 -->
+            <div class="col-md-12 col-pro">
+
+			<span class="part1">
+				<a href="{% url 'products:productList' 'robot' %}">产品中心</a>
+			</span>
+                <span class="part1 en">
+				&nbsp;&nbsp;/ Products
+			</span>
+                <a class="btn btn-default btn-xs more-btn" href="{% url 'products:productList' 'robot' %}">
+                    +&nbsp;更多
+                </a>
+                <div class="line1" style="margin-bottom:5px;">
+                    <div class="line2 theme"></div>
+                </div>
+                <div class="col-md-12 col-pro">
+                    <div id="Carousel" class="carousel slide" style="margin-bottom:30px">
+                        <ol class="carousel-indicators" style="display:none;">
+                            <li data-target="#Carousel" data-slide-to="0" class="active"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <div class="row">
+                                    {% for product in product_list %}
+                                        <div class="col-md-3 pro-images">
+                                            <a href="{% url 'products:productDetail' product.id %}" class="thumbnail">
+
+                                                <img src="{{ product.photo.url }}" alt="产品图片" class="img-responsive"
+                                                     onload="DrawImage(this)">
+
+
+                                            </a>
+                                            <div class="carousel-caption nav-title">{{ product.title }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row row-3">
+            <!-- 友情链接 -->
+            <div class="col-md-12">
+            </div>
+        </div>
+
+    </div>
+
+    <script src="{% static 'js/jqthumb.min.js' %}"></script>
+    <script>
+        //处理缩略图
+        function DrawImage(hotimg) {
+            $(hotimg).jqthumb({
+                width: '100%', // 宽度
+                height: '220px', // 高度
+                zoom: '1', // 缩放比例
+                method: 'auto' // 提交方法，用于不同的浏览器环境，默认为‘auto’
+            });
+        }
+    </script>
+{% endblock %}
