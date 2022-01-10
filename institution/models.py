@@ -45,7 +45,7 @@ class Institution(models.Model):
     city = models.CharField(max_length=20, verbose_name='城市')
     area = models.CharField(max_length=20, blank=True, null=True, verbose_name='区县')
     address = models.CharField(max_length=100, blank=True, null=True, verbose_name='详细地址')
-    institution_type = models.CharField(max_length=10, choices=InstitutionType, default='其他', verbose_name='机构类别')
+    institution_type = models.CharField(max_length=100, choices=InstitutionType, default='其他', verbose_name='机构类别')
     institution_property = models.IntegerField(choices=InstitutionProperty, verbose_name='机构性质')
     institution_character = models.IntegerField(choices=InstitutionCharacter, verbose_name='机构属性')
     post_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='邮政编码')
