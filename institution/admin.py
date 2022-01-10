@@ -21,5 +21,7 @@ class InstitutionAdmin(admin.ModelAdmin):
     # 不设置的时候，是降序，最近加的显示在最上面
     ordering = ['submit_date']
 
+    list_per_page = 1
+
 
 admin.site.register(Institution, InstitutionAdmin)
