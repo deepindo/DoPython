@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+import uuid
 
 
 class Institution(models.Model):
@@ -38,7 +39,10 @@ class Institution(models.Model):
         (3, '审批拒绝'),
     )
 
-    code = models.CharField(max_length=30, verbose_name='机构编码')
+    institution_id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
+    # serial_number = models.IntegerField(default=1, verbose_name='序号')
+    # institution_code = models.AutoField()
+    code = models.CharField(max_length=30, blank=True, verbose_name='编码')
     name = models.CharField(max_length=30, verbose_name='机构名称')
     alias = models.CharField(max_length=30, blank=True, null=True, verbose_name='机构别名')
     province = models.CharField(max_length=20, verbose_name='省份')
@@ -58,5 +62,5 @@ class Institution(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = '机构信息'
-        ordering = ('-submit_date', '-approve_status')
+        # ordering = ('-submit_date', '-approve_status')
         db_table = 'dy_institution'

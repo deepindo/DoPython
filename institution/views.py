@@ -24,4 +24,3 @@ def institution_list(request):
             'submit_date': Institution.submit_date,
         })
     return JsonResponse(arr, safe=False)
-
