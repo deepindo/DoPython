@@ -39,7 +39,7 @@ class Institution(models.Model):
         (3, '审批拒绝'),
     )
 
-    institution_id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
+    institution_id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False) # default=uuid.uuid4
     # serial_number = models.IntegerField(default=1, verbose_name='序号')
     # institution_code = models.AutoField()
     code = models.CharField(max_length=30, blank=True, verbose_name='编码')
