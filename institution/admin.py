@@ -20,12 +20,33 @@ class ExportCSV:
 
 
 class InstitutionAdmin(admin.ModelAdmin):
-    # 要显示的字段
-    list_display = ('institution_code', 'name', 'alias', 'province', 'city', 'area', 'address', 'institution_type',
-                    'institution_property', 'institution_character', 'post_number', 'phone', 'approve_status',
-                    'submit_date',)
 
-    readonly_fields = ('institution_code',)
+    # 空值的展示
+    empty_value_display = '/'
+
+    # 要显示的字段
+    # list_display = ('institution_code', 'name', 'alias', 'province', 'city', 'area', 'address', 'institution_type',
+    #                 'institution_property', 'institution_character', 'post_number', 'phone', 'approve_status',
+    #                 'submit_date',)
+    list_display = ('institution_code', 'name', 'alias', 'detail_address', 'institution_type',
+                    'institution_property', 'institution_character', 'post_number', 'phone', 'approve_status',
+                    'submit_date', )
+
+    # 可以点击跳转的字段
+    list_display_links = ('name',)
+
+    # 对于添加和修改，只读字段的不同处理
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return ['institution_code', "institution_type", "institution_property", 'institution_character', 'approve_status',
+                    'submit_date', ]
+        else:
+            return ['institution_code', ]
+
+    # 只读字段
+    # readonly_fields = ('institution_code',)
+
+
 
     # 增加Institution页面-展示(展示在同一行的放在一个元祖中, 对于一个元祖中超过两个，那么这多个会相对上下距离较近)
     # fields = (

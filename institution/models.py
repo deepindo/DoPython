@@ -39,11 +39,9 @@ class Institution(models.Model):
         (3, '审批拒绝'),
     )
 
-
-
     # default=uuid.uuid4
     institution_id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
-    institution_code = models.CharField(max_length=20, default='HA'+'000001', verbose_name='机构编码', editable=False)
+    institution_code = models.CharField(max_length=20, default='HA'+'000001', verbose_name='机构编码',)
     # serial_number = models.IntegerField(default=1, verbose_name='序号')
     code = models.CharField(max_length=30, blank=True, verbose_name='编码')
     name = models.CharField(max_length=10, verbose_name='机构名称')
@@ -63,9 +61,9 @@ class Institution(models.Model):
     # def institution_count(self):
     #     return self.institution_id_set.count()
 
-    # def
-
-    
+    def detail_address(self):
+        return self.province + '-' + self.city + '' + self.area + '' + self.address
+    detail_address.short_description = '详细地址'
 
     def __str__(self):
         return self.name
