@@ -30,10 +30,11 @@ class InstitutionAdmin(admin.ModelAdmin):
     #                 'submit_date',)
     list_display = ('institution_code', 'name', 'alias', 'detail_address', 'institution_type',
                     'institution_property', 'institution_character', 'post_number', 'phone', 'approve_status',
-                    'submit_date', )
+                    'submit_date', 'detail_info',)
 
-    # 可以点击跳转的字段
-    list_display_links = ('name',)
+    # 可以点击跳转的字段, 可以设置为None，一个不要
+    list_display_links = None
+    # list_display_links = ('name',)
 
     # 对于添加和修改，只读字段的不同处理
     def get_readonly_fields(self, request, obj=None):
@@ -83,7 +84,13 @@ class InstitutionAdmin(admin.ModelAdmin):
 
     actions = ['approve_institution', ]
     # ["export_as_csv", ]
+
+    # 以下两个要结合使用， 不生效？
     actions_on_bottom = True
+    actions_on_top = False
+    # action_form = ["A", "B",] # 这个干嘛的，不能用
+
+    # actions_selection_counter =
 
     def approve_institution(self, request, queryset):
         queryset.update(approve_status=2)

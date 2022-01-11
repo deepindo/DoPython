@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 import uuid
+from django.utils.html import mark_safe
 
 
 class Institution(models.Model):
@@ -64,6 +65,10 @@ class Institution(models.Model):
     def detail_address(self):
         return self.province + '-' + self.city + '' + self.area + '' + self.address
     detail_address.short_description = '详细地址'
+
+    def detail_info(self):
+        return mark_safe('<a href="www.baidu.com" target="blank">详情</a>')
+    detail_info.short_description = "操作"
 
     def __str__(self):
         return self.name
