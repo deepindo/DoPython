@@ -39,11 +39,14 @@ class Institution(models.Model):
         (3, '审批拒绝'),
     )
 
-    institution_id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False) # default=uuid.uuid4
+
+
+    # default=uuid.uuid4
+    institution_id = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
+    institution_code = models.CharField(max_length=20, default='HA'+'000001', verbose_name='机构编码', editable=False)
     # serial_number = models.IntegerField(default=1, verbose_name='序号')
-    # institution_code = models.AutoField()
     code = models.CharField(max_length=30, blank=True, verbose_name='编码')
-    name = models.CharField(max_length=30, verbose_name='机构名称')
+    name = models.CharField(max_length=10, verbose_name='机构名称')
     alias = models.CharField(max_length=30, blank=True, null=True, verbose_name='机构别名')
     province = models.CharField(max_length=20, verbose_name='省份')
     city = models.CharField(max_length=20, verbose_name='城市')
@@ -56,6 +59,13 @@ class Institution(models.Model):
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='机构电话')
     approve_status = models.IntegerField(choices=ApproveType, default=1, verbose_name='审批状态')
     submit_date = models.DateTimeField(default=timezone.now, verbose_name='提交时间')
+
+    # def institution_count(self):
+    #     return self.institution_id_set.count()
+
+    # def
+
+    
 
     def __str__(self):
         return self.name

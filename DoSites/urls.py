@@ -21,7 +21,6 @@ from DoSites import settings
 from django.conf import settings
 from django.conf.urls.static import static
 
-# from institution1.views import institution_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,6 +31,7 @@ urlpatterns = [
     path('service/', include('service.urls')),    # 服务支持
     path('science/', include('science.urls')),    # 科研基地
     path('contact/', include('contact.urls')),    # 人才招聘
+    # path('institution-admin/', institution_admin_site.urls),
     # path('api/institution1/', institution_list),
     # path('ueditor/', include('DjangoUeditor.urls')),   # 编辑
     # path('search/', include('haystack.urls')),    # 添加haystack搜索的路径

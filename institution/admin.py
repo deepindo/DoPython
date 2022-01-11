@@ -1,27 +1,77 @@
 from django.contrib import admin
 from institution.models import Institution
+import csv
+from django.http import HttpResponse
+
+
+class ExportCSV:
+    def export_as_csv(self, request, queryset):
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = csv.writer(response)
+        writer.writerow(field_names)
+
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+        return response
+    export_as_csv.short_description = '导出'
 
 
 class InstitutionAdmin(admin.ModelAdmin):
     # 要显示的字段
-    list_display = ('code', 'name', 'alias', 'province', 'city', 'area', 'address', 'institution_type',
+    list_display = ('institution_code', 'name', 'alias', 'province', 'city', 'area', 'address', 'institution_type',
                     'institution_property', 'institution_character', 'post_number', 'phone', 'approve_status',
                     'submit_date',)
 
-    # 增加Institution页面-展示(展示在同一行的放在一个元祖中, 对于一个元祖中超过两个，那么这多个会相对上下距离较近)
-    fields = (('name', 'alias'), ('code', 'institution_type'), ('institution_property', 'institution_character'),
-              ('province', 'city'), ('area', 'address'), ('post_number', 'phone'), 'approve_status', 'submit_date',)
+    readonly_fields = ('institution_code',)
 
-    # 搜索功能
-    search_fields = ('code', 'name')
+    # 增加Institution页面-展示(展示在同一行的放在一个元祖中, 对于一个元祖中超过两个，那么这多个会相对上下距离较近)
+    # fields = (
+    # ('name', 'alias'), ('institution_code', 'institution_type'), ('institution_property', 'institution_character'),
+    # ('province', 'city'), ('area', 'address'), ('post_number', 'phone'), 'approve_status', 'submit_date',)
+
+    fieldsets = (
+        ('基本信息', {
+            'fields': ('institution_code', 'name', 'alias', 'institution_type', 'institution_property', 'institution_character',)
+        }),
+        ('其他信息', {
+            'fields': (('province', 'city'), ('area', 'address'), ('post_number', 'phone'), )
+        }),
+        ('操作信息', {
+            'fields': ('approve_status', 'submit_date',)
+        }),
+    )
+
+    # 模糊搜索功能
+    search_fields = ('code', 'name', 'alias', 'province', 'city', 'area', 'address',)
 
     # 筛选功能 admin.RelatedFieldListFilter, admin.EmptyFieldListFilter, admin.RelatedOnlyFieldListFilter
-    list_filter = ('institution_type', 'approve_status', 'institution_property',)
+    list_filter = ('institution_type', 'institution_property', 'institution_character', 'approve_status',)
 
     # 不设置的时候，是降序，最近加的显示在最上面
-    ordering = ['submit_date']
+    ordering = ('submit_date',)
 
+    # 每页显示条目数
     list_per_page = 10
+
+    # list_editable = ('phone',)
+
+    # date_hierarchy = 'submit_date'
+
+    actions = ['approve_institution', ]
+    # ["export_as_csv", ]
+    actions_on_bottom = True
+
+    def approve_institution(self, request, queryset):
+        queryset.update(approve_status=2)
+    approve_institution.short_description = "批量审批"
+
+
+    # def export_excel(self, request, queryset):
+    #     print("test export")
+    #     # queryset.update()
 
 
 admin.site.register(Institution, InstitutionAdmin)
