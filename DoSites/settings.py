@@ -158,13 +158,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # 指定simpleui默认的主题,指定一个文件名，相对路径就从simpleui的theme目录读取
 SIMPLEUI_DEFAULT_THEME = 'Green.css'
+
 SIMPLEUI_DEFAULT_ICON = False
-SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
+SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'  # 自定义SIMPLEUI的Logo
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_HOME_QUICK = True
 SIMPLEUI_HOME_ACTION = True
+SIMPLEUI_HOME_PAGE = 'https://www.baidu.com' # 首页配置
+SIMPLEUI_HOME_TITLE = '百度一下你就知道' # 首页标题
+SIMPLEUI_HOME_ICON = 'fa fa-user' # 首页图标,支持element-ui和fontawesome的图标，参考https://fontawesome.com/icons图标
 SIMPLEUI_ANALYSIS = False
 SIMPLEUI_LOGIN_PARTICLES = True
+SIMPLEUI_INDEX = 'https://www.88cto.com' # 首页顶部首页图标默认跳转地址为/，即根目录
 SIMPLEUI_ICON = {
     '公司简介': 'fas fa-building',
     '荣誉资质': 'fas fa-trophy',
