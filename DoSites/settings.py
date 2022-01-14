@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'approve',       # 审批中心
     'system',        # 系统管理
     'forms',         # 报表中心
+    'person',        # 人员管理
 
     # 其他插件
     'DjangoUeditor',  # 富文本编辑器
@@ -164,12 +165,14 @@ SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'  # 
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_HOME_QUICK = True
 SIMPLEUI_HOME_ACTION = True
-SIMPLEUI_HOME_PAGE = 'https://www.baidu.com' # 首页配置
-SIMPLEUI_HOME_TITLE = '百度一下你就知道' # 首页标题
-SIMPLEUI_HOME_ICON = 'fa fa-user' # 首页图标,支持element-ui和fontawesome的图标，参考https://fontawesome.com/icons图标
+# SIMPLEUI_HOME_PAGE = 'https://www.baidu.com' # 首页配置
+# SIMPLEUI_HOME_TITLE = '圣源峰' # 首页标题
+SIMPLEUI_HOME_ICON = 'fa fa-user'  # 首页图标,支持element-ui和fontawesome的图标，参考https://fontawesome.com/icons图标
 SIMPLEUI_ANALYSIS = False
 SIMPLEUI_LOGIN_PARTICLES = True
-SIMPLEUI_INDEX = 'https://www.88cto.com' # 首页顶部首页图标默认跳转地址为/，即根目录
+# SIMPLEUI_INDEX = 'https://www.88cto.com'  # 首页顶部首页图标默认跳转地址为/，即根目录
+# SIMPLEUI_STATIC_OFFLINE = False
+SIMPLEUI_LOADING = True
 SIMPLEUI_ICON = {
     '公司简介': 'fas fa-building',
     '荣誉资质': 'fas fa-trophy',
