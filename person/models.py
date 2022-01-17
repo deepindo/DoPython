@@ -36,7 +36,7 @@ class Person(models.Model):
     gender = models.CharField(verbose_name='性别', choices=GenderType, default='男', max_length=5, )
     ID_number = models.CharField(verbose_name='身份证号', blank=False, null=False, max_length=18, )
     birthday = models.DateTimeField(verbose_name='出生年月')
-    mobile_phone = models.CharField(verbose_name='手机号', max_length=11)
+    mobile_phone = models.CharField(verbose_name='手机号', max_length=11, )
     contact_phone = models.CharField(verbose_name='联系电话', blank=True, null=True, max_length=30, )
     wechat = models.CharField(verbose_name='微信', blank=True, null=True, max_length=50, )
     QQ = models.CharField(verbose_name='QQ', blank=True, null=True, max_length=50, )
@@ -46,12 +46,18 @@ class Person(models.Model):
     graduate_institution = models.CharField(verbose_name='毕业院校', max_length=100, )
     education_background = models.CharField(verbose_name='学历', choices=EducationBackgroundType, default='其他', max_length=30, )
     major = models.CharField(verbose_name='主修专业', max_length=100, )
-    score = models.FloatField(verbose_name='成绩')
+    score = models.FloatField(verbose_name='成绩', )
     residential_address = models.CharField(verbose_name='居住地址', blank=True, null=True, max_length=100, )
     native_place = models.CharField(verbose_name='籍贯', blank=True, null=True, max_length=100, )
     emergency_contact = models.CharField(verbose_name='紧急联系人', blank=True, null=True, max_length=20, )
     emergency_phone = models.BigIntegerField(verbose_name='紧急联系方式', blank=True, null=True, )
     state = models.IntegerField(verbose_name='状态', choices=StateType, default=1, )
+
+    # 状态图标
+    def state_icon(self):
+        return self.state == 1
+    state_icon.short_description = '状态'
+    state_icon.boolean = True  # 添加一个boolean属性
 
     def __str__(self):
         return self.name
@@ -60,10 +66,8 @@ class Person(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
 
-        if self.person_code == '':
-
+        if self.person_code is None or self.person_code == '':
             new_count = Person.objects.count() + 1
-
             self.person_code = 'ID' + '%05d' % new_count
 
         super().save()

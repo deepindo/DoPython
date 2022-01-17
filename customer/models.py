@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from institution.models import Institution
 
 
 class Customer(models.Model):
@@ -57,6 +58,7 @@ class Customer(models.Model):
     customer_phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='客户电话')
     approve_status = models.IntegerField(choices=ApproveType, default=1, verbose_name='审批状态')
     submit_date = models.DateTimeField(default=timezone.now, verbose_name='提交时间')
+    # institution = models.ForeignKey('Institution', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.customer_name

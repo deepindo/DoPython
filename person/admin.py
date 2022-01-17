@@ -5,9 +5,14 @@ from person.models import Person
 
 # @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('id', 'person_code', 'avatar', 'name', 'gender', 'age', 'ID_number', 'birthday', 'mobile_phone', 'graduate_institution', 'education_background', 'major', 'score', 'residential_address', 'native_place',
-                    'emergency_contact', 'emergency_phone', 'state', 'operate',)  #  'contact_phone', 'wechat', 'QQ', 'email', 'weibo', 'hobby',
+    list_display = ('id', 'person_code', 'avatar', 'name', 'gender', 'age', 'ID_number', 'birthday', 'mobile_phone', 'email', 'graduate_institution', 'education_background', 'major', 'score', 'residential_address', 'native_place',
+                    'emergency_contact', 'emergency_phone', 'state_icon', 'operate',)  #  'contact_phone', 'wechat', 'QQ', 'email', 'weibo', 'hobby',
     list_display_links = ('name',)
+
+    """boolean类型显示图标的列，可以如下写"""
+    # def state_icon(self, obj):
+    #     return obj.state == 1
+    # state_icon.boolean = True
 
     # 对于添加和修改，只读字段的不同处理
     def get_readonly_fields(self, request, obj=None):

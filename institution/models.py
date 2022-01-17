@@ -77,7 +77,7 @@ class Institution(models.Model):
 
         # 若是self.institution_code为None，才是insert数据，而不是update数据
         # if self.institution_code is None: # 不知道为何这个判断逻辑不生效了
-        if self.institution_code == '':
+        if self.institution_code is None or self.institution_code == '':
             print('institution_code为空')
             print(self.institution_code)
 
