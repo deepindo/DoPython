@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
-import uuid
 from django.utils.html import mark_safe
+import uuid
 
 
 class Institution(models.Model):
@@ -76,13 +76,17 @@ class Institution(models.Model):
              update_fields=None):
 
         # 若是self.institution_code为None，才是insert数据，而不是update数据
-        if self.institution_code is None:
+        # if self.institution_code is None: # 不知道为何这个判断逻辑不生效了
+        if self.institution_code == '':
+            print('institution_code为空')
             print(self.institution_code)
+
             # 获取数据库当前数据条数, 新的将在当前基础上加1
             new_count = Institution.objects.count() + 1
 
-            # 对于机构编码institution_code，也可以用另外一种方法实现：self.institution_code = 'HA' + count.zfill(6)
+            # 对于机构编码institution_code，也可以用另外一种方法实现：self.institution_code = 'HA' + new_count.zfill(6)
             self.institution_code = 'HA' + '%06d' % new_count
+
             # 序号
             self.serial_number = new_count
 

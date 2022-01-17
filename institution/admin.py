@@ -39,10 +39,10 @@ class InstitutionAdmin(admin.ModelAdmin):
 
     # 对于添加和修改，只读字段的不同处理
     def get_readonly_fields(self, request, obj=None):
-        if obj:
+        if obj:  # 编辑
             return ['institution_code', "institution_type", "institution_property", 'institution_character', 'approve_status',
                     'create_date', ]
-        else:
+        else:  # 新增
             return ['institution_code', ]
 
     # 只读字段
