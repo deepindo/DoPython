@@ -1,16 +1,15 @@
 from django.contrib import admin
 from institution.models import Institution
-import csv
 from django.http import HttpResponse, JsonResponse
+import xlwt as xlwt  # 导出Excel框架
+from io import BytesIO
+import datetime
+
+# 下面的暂时不用，或者没有用
+import csv
 from simpleui.admin import AjaxAdmin
 from django.utils import timezone
 import time
-
-import datetime
-import xlwt as xlwt  # 导出Excel框架
-from io import BytesIO
-
-# from django.utils.http import urlquote
 
 
 class InstitutionAdmin(admin.ModelAdmin):
@@ -98,6 +97,10 @@ class InstitutionAdmin(admin.ModelAdmin):
     button_batch_approve.confirm = '您确定要批量审批选中的机构？'
     button_batch_approve.action_type = 2  # action_type 0=当前页内打开，1=新tab打开，2=浏览器tab打开
     button_batch_approve.action_url = 'https://www.baidu.com'
+
+    """使用openpyxl导出excel"""
+    def export_excel_openpyxl(self, request, queryset):
+        pass
 
     """自定义操作：导出Excel"""
     def button_export_excel(self, request, queryset):
@@ -252,6 +255,21 @@ class InstitutionAdmin(admin.ModelAdmin):
           """, num_format_str='YYYY-MM-DD')  # 设置时间格式样式为 2019-03-01
         # body_style_time = body_style_center
         # body_style_time.num_format_str = 'YYYY-MM-DD hh:mm'  # 设置时间格式样式为 2019-03-01 17:30
+        # fmts = [
+        #     'M/D/YY',
+        #     'D-MMM-YY',
+        #     'D-MMM',
+        #     'MMM-YY',
+        #     'h:mm AM/PM',
+        #     'h:mm:ss AM/PM',
+        #     'h:mm',
+        #     'h:mm:ss',
+        #     'M/D/YY h:mm',
+        #     'mm:ss',
+        #     '[h]:mm:ss',
+        #     'mm:ss.0',
+        # ]
+        # body_style_time.num_format_str = fmts[0]
 
         # # 接下来是合并单元格，这个是一个比较细的工作：
         # # 合并单元格 顺序是从0开始
@@ -318,12 +336,9 @@ class InstitutionAdmin(admin.ModelAdmin):
         excel_sheet.write(0, 14, '创建时间', head_style_black)
 
         # 写入数据
-        # for i in Institution.objects.all().filter(name=filename):  # 查询要写入的数据
         # 因为这里写入数据是根据一行一行添加的，所以要有一个索引，比如用row = 1, 每次循环完row = row + 1
-        # for q in queryset:
-        #     q
         row = 1
-        for i in Institution.objects.all():
+        for i in Institution.objects.all().order_by('serial_number'):
             excel_sheet.write(row, 0, i.serial_number, body_style_center)
             excel_sheet.write(row, 1, i.institution_code, body_style_center)
             excel_sheet.write(row, 2, i.name, body_style)
@@ -377,60 +392,60 @@ class InstitutionAdmin(admin.ModelAdmin):
             row = row + 1
 
         # 或者用下面的enumerate的方法，就得列出索引:i, 以及值:v
-        # for i, v in enumerate(Institution.objects.all()):  # 查询要写入的数据
-            # excel_sheet.write(i + 1, 0, v.serial_number, body_style_center)
-            # excel_sheet.write(i + 1, 1, v.institution_code, body_style_center)
-            # excel_sheet.write(i + 1, 2, v.name, body_style)
-            # excel_sheet.write(i + 1, 3, v.alias, body_style)
-            # excel_sheet.write(i + 1, 4, v.province, body_style_center)
-            # excel_sheet.write(i + 1, 5, v.city, body_style_center)
-            # excel_sheet.write(i + 1, 6, v.area, body_style_center)
-            # excel_sheet.write(i + 1, 7, v.address, body_style)
-            # excel_sheet.write(i + 1, 8, v.institution_type, body_style_center)
-            #
-            # # 判断：机构性质
-            # if v.institution_property == 1:
-            #     institution_property_value = '民营医院'
-            # elif v.institution_property == 2:
-            #     institution_property_value = '公立医院'
-            # elif v.institution_property == 3:
-            #     institution_property_value = '专科医院'
-            # elif v.institution_property == 4:
-            #     institution_property_value = '未知'
-            # else:
-            #     institution_property_value = '/'
-            # excel_sheet.write(i + 1, 9, institution_property_value, body_style_center)
-            #
-            # # 判断：机构属性
-            # if v.institution_character == 1:
-            #     institution_character_value = 'Common'
-            # elif v.institution_character == 2:
-            #     institution_character_value = 'COE'
-            # elif v.institution_character == 3:
-            #     institution_character_value = 'Focus'
-            # else:
-            #     institution_character_value = '/'
-            # excel_sheet.write(i + 1, 10, institution_character_value, body_style_center)
-            # excel_sheet.write(i + 1, 11, v.post_number, body_style)
-            # excel_sheet.write(i + 1, 12, v.phone, body_style)
-            #
-            # # 判断：审批状态
-            # if v.approve_status == 1:
-            #     approve_status_value = '待审批'
-            # elif v.approve_status == 2:
-            #     approve_status_value = '审批通过'
-            # elif v.approve_status == 3:
-            #     approve_status_value = '审批拒绝'
-            # else:
-            #     approve_status_value = '/'
-            # excel_sheet.write(i + 1, 13, approve_status_value, body_style_center)
-            #
-            # # 时区对不上，要转一下格式
-            # create_date_value = v.create_date.strftime('%Y年%m月%d日 %H:%M:%S')
-            # excel_sheet.write(i+1, 14, create_date_value, body_style_time)
+        # for i, v in enumerate(Institution.objects.all().order_by('serial_number')):  # 查询要写入的数据
+        #     excel_sheet.write(i + 1, 0, v.serial_number, body_style_center)
+        #     excel_sheet.write(i + 1, 1, v.institution_code, body_style_center)
+        #     excel_sheet.write(i + 1, 2, v.name, body_style)
+        #     excel_sheet.write(i + 1, 3, v.alias, body_style)
+        #     excel_sheet.write(i + 1, 4, v.province, body_style_center)
+        #     excel_sheet.write(i + 1, 5, v.city, body_style_center)
+        #     excel_sheet.write(i + 1, 6, v.area, body_style_center)
+        #     excel_sheet.write(i + 1, 7, v.address, body_style)
+        #     excel_sheet.write(i + 1, 8, v.institution_type, body_style_center)
+        #
+        #     # 判断：机构性质
+        #     if v.institution_property == 1:
+        #         institution_property_value = '民营医院'
+        #     elif v.institution_property == 2:
+        #         institution_property_value = '公立医院'
+        #     elif v.institution_property == 3:
+        #         institution_property_value = '专科医院'
+        #     elif v.institution_property == 4:
+        #         institution_property_value = '未知'
+        #     else:
+        #         institution_property_value = '/'
+        #     excel_sheet.write(i + 1, 9, institution_property_value, body_style_center)
+        #
+        #     # 判断：机构属性
+        #     if v.institution_character == 1:
+        #         institution_character_value = 'Common'
+        #     elif v.institution_character == 2:
+        #         institution_character_value = 'COE'
+        #     elif v.institution_character == 3:
+        #         institution_character_value = 'Focus'
+        #     else:
+        #         institution_character_value = '/'
+        #     excel_sheet.write(i + 1, 10, institution_character_value, body_style_center)
+        #     excel_sheet.write(i + 1, 11, v.post_number, body_style)
+        #     excel_sheet.write(i + 1, 12, v.phone, body_style)
+        #
+        #     # 判断：审批状态
+        #     if v.approve_status == 1:
+        #         approve_status_value = '待审批'
+        #     elif v.approve_status == 2:
+        #         approve_status_value = '审批通过'
+        #     elif v.approve_status == 3:
+        #         approve_status_value = '审批拒绝'
+        #     else:
+        #         approve_status_value = '/'
+        #     excel_sheet.write(i + 1, 13, approve_status_value, body_style_center)
+        #
+        #     # 时区对不上，要转一下格式
+        #     create_date_value = v.create_date.strftime('%Y年%m月%d日 %H:%M:%S')
+        #     excel_sheet.write(i+1, 14, create_date_value, body_style_time)
 
         # 写出到IO
-        output = BytesIO()
+        output = BytesIO()  # 也有人这么写output = StringIO.StringIO()
         excel_file.save(output)
 
         # 重新定位到开始
