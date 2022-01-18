@@ -137,7 +137,7 @@ TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = True  # 这个设置为False可以解决使用models.DateTimeField(default=timezone.now时，存入数据库的时间错8个时区的问题，当然目前先设置为True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

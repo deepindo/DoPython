@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.html import mark_safe
 import uuid
+import datetime
 
 
 class Institution(models.Model):
@@ -56,7 +57,7 @@ class Institution(models.Model):
     post_number = models.CharField(max_length=20, blank=True, null=True, verbose_name='邮政编码')
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name='机构电话')
     approve_status = models.IntegerField(choices=ApproveType, default=1, verbose_name='审批状态')
-    create_date = models.DateTimeField(default=timezone.now, verbose_name='创建时间')
+    create_date = models.DateTimeField(default=timezone.now, verbose_name='创建时间')  # default=timezone.now也有问题, default=datetime.datetime.now也是
 
     # 自定义显示字段：完整地址
     def full_address(self):

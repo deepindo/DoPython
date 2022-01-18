@@ -14,7 +14,7 @@ import time
 
 class InstitutionAdmin(admin.ModelAdmin):
     # 空值的展示
-    empty_value_display = '/'
+    empty_value_display = ''
 
     # 要显示的字段
     # list_display = ('institution_code', 'name', 'alias', 'province', 'city', 'area', 'address', 'institution_type',
