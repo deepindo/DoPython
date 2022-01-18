@@ -4,28 +4,16 @@ import csv
 from django.http import HttpResponse, JsonResponse
 from simpleui.admin import AjaxAdmin
 from django.utils import timezone
+import time
 
-import xlwt as xlwt
+import datetime
+import xlwt as xlwt  # 导出Excel框架
 from io import BytesIO
 
-
-class ExportCSV:
-    def export_as_csv(self, request, queryset):
-        meta = self.model._meta
-        field_names = [field.name for field in meta.fields]
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
-        writer = csv.writer(response)
-        writer.writerow(field_names)
-
-        for obj in queryset:
-            row = writer.writerow([getattr(obj, field) for field in field_names])
-        return response
-    export_as_csv.short_description = '导出'
+# from django.utils.http import urlquote
 
 
 class InstitutionAdmin(admin.ModelAdmin):
-
     # 空值的展示
     empty_value_display = '/'
 
@@ -44,7 +32,8 @@ class InstitutionAdmin(admin.ModelAdmin):
     # 对于添加和修改，只读字段的不同处理
     def get_readonly_fields(self, request, obj=None):
         if obj:  # 编辑
-            return ['institution_code', "institution_type", "institution_property", 'institution_character', 'approve_status',
+            return ['institution_code', "institution_type", "institution_property", 'institution_character',
+                    'approve_status',
                     'create_date', ]
         else:  # 新增
             return ['institution_code', ]
@@ -56,7 +45,8 @@ class InstitutionAdmin(admin.ModelAdmin):
     search_fields = ('code', 'name', 'alias', 'province', 'city', 'area', 'address',)
 
     # 筛选功能 admin.RelatedFieldListFilter, admin.EmptyFieldListFilter, admin.RelatedOnlyFieldListFilter
-    list_filter = ('institution_type', 'institution_property', 'institution_character', 'create_date', 'approve_status',)
+    list_filter = (
+        'institution_type', 'institution_property', 'institution_character', 'create_date', 'approve_status',)
 
     # 不设置的时候，是降序，最近加的显示在最上面
     ordering = ('institution_code',)
@@ -68,7 +58,7 @@ class InstitutionAdmin(admin.ModelAdmin):
     # date_hierarchy = 'create_date'
 
     # 列表顶部全局按钮
-    actions = ('button_batch_approve', 'button_export_excel', 'alert_batch_approve', 'upload_file', )
+    actions = ('button_batch_approve', 'button_export_excel', 'alert_batch_approve', 'upload_file',)
     # ["export_as_csv", ]
 
     # 以下两个要结合使用， 不生效？
@@ -85,19 +75,23 @@ class InstitutionAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('基本信息', {
-            'fields': ('institution_code', ('name', 'alias'), ('province', 'city'), ('area', 'address'), ('phone', 'post_number',), )
+            'fields': ('institution_code', ('name', 'alias'), ('province', 'city'), ('area', 'address'),
+                       ('phone', 'post_number',),)
         }),
         ('其他信息', {
-            'fields': ('institution_type', 'institution_property', 'institution_character', 'approve_status', 'create_date',)
+            'fields': (
+                'institution_type', 'institution_property', 'institution_character', 'approve_status', 'create_date',)
         }),
     )
 
     """自定义操作：批量审批"""
+
     def button_batch_approve(self, request, queryset):
         print('-' * 10)
         print(request)
         print(queryset)
         queryset.update(approve_status=2)
+
     button_batch_approve.short_description = "批量审批"
     button_batch_approve.type = 'warning'
     button_batch_approve.style = 'color:black;'
@@ -108,57 +102,101 @@ class InstitutionAdmin(admin.ModelAdmin):
     """自定义操作：导出Excel"""
     def button_export_excel(self, request, queryset):
 
-        # 这个for循环是为了在多选的时候只导出第一个文件，避免多个被同时导出
-        for i in queryset:
-            filename = str(i)
-            print(filename)
-            break
+        """关于python中的时间"""
+        # print(time)  # <module 'time' (built-in)>
+        # print(datetime.datetime.now())  # <module 'time' (built-in)>
+        # print(timezone.now())  #  2022-01-18 07:21:15.674924+00:00
 
+        file_name = '机构信息' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        # 这一步很重要，不这样做，导出的文件将是：下载.xlw，当然英文名不受影响，可以正常导出
+        file_name = file_name.encode('utf-8').decode('ISO-8859-1')
+        attachment_name = 'attachment;filename=' + file_name + '.xlsx'
         response = HttpResponse(content_type='application/vnd.ms-excel')
-        # response['Content-Disposition'] = 'attachment;filename=20220117.xlsx'  # 这个表名为何不能用中文
-
-        for i in Institution.objects.all().filter(name = filename):
-            filename = i.serial_number
-            filename = filename.encode('gb2312')  # 为了能将导出的excel命名为中文，必须转成gb2312
-            typess = 'attachment;filename='+filename+'.xlsx'  # 这一步命名导出的excel，为登记的case名称
-            response['Content-Disposition'] = typess
+        response['Content-Disposition'] = attachment_name
+        # response['Content-Disposition'] = 'attachment;filename={0}'.format(urlquote) + '.xlsx'
 
         # 创建excel文件对象
         excel_file = xlwt.Workbook(encoding='utf-8')
 
         # 创建一个sheet对象
-        excel_sheet = excel_file.add_sheet('机构信息', cell_overwrite_ok=True)  # 创建的sheet名称为机构信息，注意如果想要开启覆盖写入，必须将overwrite功能开启
+        # 创建的sheet名称为机构信息，注意如果想要开启覆盖写入，必须将overwrite功能开启
+        excel_sheet = excel_file.add_sheet('机构信息', cell_overwrite_ok=True)
 
         # 定义字体和表格样式：
-        # 接下里是定义表格的样式，如果你想对不同的表格定义不同的样式只能采用下面这种方式，否则将会默认成一种格式，即使定义了不同的变量，也会影响全局变量
-        style_heading = xlwt.easyxf("""
-          font: # 字体设置
-            name Microsoft YaHei,  # 定义字体为微软雅黑
-            colour_index black,  # 字体颜色为黑色
-            bold off,  # 不加粗
-            height 200; #字体大小 此处的200实际对应的字号是10号
-          align: # 对齐方式设置
-            wrap off, #自动换行 关闭
-            vert center, #上下居中
-            horiz center; #左右居中
-          pattern: #表格样式设置
+        # 接下里是定义表格的样式，如果你想对不同的表格定义不同的样式只能采用下面这种方式，
+        # 否则将会默认成一种格式，即使定义了不同的变量，也会影响全局变量
+        # style_heading = xlwt.easyxf("""
+        # font: # 字体设置
+        # name Microsoft YaHei,  # 定义字体为微软雅黑
+        # colour_index black,  # 字体颜色为黑色
+        # bold off,  # 不加粗
+        # height 200; #字体大小 此处的200实际对应的字号是10号
+        # align: # 对齐方式设置
+        # wrap off, #自动换行 关闭
+        # vert center, #上下居中
+        # horiz center; #左右居中
+        # pattern: #表格样式设置
+        # pattern solid,
+        # fore-colour white; # 表格颜色 白色
+        # borders: # 表格外框设置
+        # left THIN, #THIN 为实线
+        # right THIN,
+        # top THIN,
+        # bottom THIN;
+        # """)
+
+        # 表头的红色style
+        head_style_red = xlwt.easyxf("""
+          font:
+            name Microsoft YaHei,
+            colour_index red,
+            bold on,
+            height 200;
+          align:
+            wrap off,
+            vert center,
+            horiz center;
+          pattern:
             pattern solid, 
-            fore-colour white; # 表格颜色 白色
-          borders: # 表格外框设置
-            left THIN, #THIN 为实线
+            fore-colour white;
+          borders:
+            left THIN,
             right THIN,
             top THIN,
             bottom THIN; 
           """)
 
-        style_playback = xlwt.easyxf("""
+        # 表头的黑色style
+        head_style_black = xlwt.easyxf("""
+          font:
+            name Microsoft YaHei,
+            colour_index black,
+            bold on,
+            height 200;
+          align:
+            wrap off,
+            vert center,
+            horiz center;
+          pattern:
+            pattern solid, 
+            fore-colour white;
+          borders:
+            left THIN,
+            right THIN,
+            top THIN,
+            bottom THIN; 
+          """)
+
+        """wrap 1, # 此处设置为1时表示开启自动换行"""
+        # 表内容
+        body_style = xlwt.easyxf("""
           font:
             name Microsoft YaHei,
             colour_index black,
             bold off,
             height 200;
           align:
-            wrap 1, # 此处设置为1时表示开启自动换行
+            wrap 1,
             vert center,
             horiz left;
           pattern:
@@ -171,7 +209,29 @@ class InstitutionAdmin(admin.ModelAdmin):
             bottom THIN;
           """)
 
-        style_time_s = xlwt.easyxf("""
+        # 表内容居中
+        body_style_center = xlwt.easyxf("""
+          font:
+            name Microsoft YaHei,
+            colour_index black,
+            bold off,
+            height 200;
+          align:
+            wrap 1,
+            vert center,
+            horiz center;
+          pattern:
+            pattern solid,
+            fore-colour white;
+          borders:
+            left THIN,
+            right THIN,
+            top THIN,
+            bottom THIN;
+          """)
+
+        # 表内容_日期
+        body_style_time = xlwt.easyxf("""
           font:
             name Microsoft YaHei,
             colour_index black,
@@ -190,9 +250,8 @@ class InstitutionAdmin(admin.ModelAdmin):
             top THIN,
             bottom THIN;
           """, num_format_str='YYYY-MM-DD')  # 设置时间格式样式为 2019-03-01
-
-        style_time = style_heading
-        style_time.num_format_str = 'YYYY-MM-DD hh:mm'  # 设置时间格式样式为 2019-03-01 17:30
+        # body_style_time = body_style_center
+        # body_style_time.num_format_str = 'YYYY-MM-DD hh:mm'  # 设置时间格式样式为 2019-03-01 17:30
 
         # # 接下来是合并单元格，这个是一个比较细的工作：
         # # 合并单元格 顺序是从0开始
@@ -209,78 +268,166 @@ class InstitutionAdmin(admin.ModelAdmin):
 
         # 定义表格的宽度和高度
         row1 = excel_sheet.col(0)
-        row1.width = 80*80
+        row1.width = 1400
         row2 = excel_sheet.col(1)
-        row2.width = 80*80
+        row2.width = 3000
         row3 = excel_sheet.col(2)
-        row3.width = 80*80
+        row3.width = 6000
         row4 = excel_sheet.col(3)
-        row4.width = 80*80
+        row4.width = 3000
         row5 = excel_sheet.col(4)
-        row5.width = 80*80
+        row5.width = 1600
         row6 = excel_sheet.col(5)
-        row6.width = 80*80
+        row6.width = 1600
         row7 = excel_sheet.col(6)
-        row7.width = 80*80
+        row7.width = 1600
         row8 = excel_sheet.col(7)
-        row8.width = 80*80
+        row8.width = 6400
+        # row8.height_mismatch = True  # 高度可不依赖字体大小定义，定义高度时最好开启此选项
         row9 = excel_sheet.col(8)
-        row9.width = 80*80
+        row9.width = 2300
         row10 = excel_sheet.col(9)
-        row10.width = 80*80
+        row10.width = 2300
         row11 = excel_sheet.col(10)
-        row11.width = 80*80
+        row11.width = 2300
         row12 = excel_sheet.col(11)
-        row12.width = 80*80
+        row12.width = 2300
         row13 = excel_sheet.col(12)
-        row13.width = 80*80
+        row13.width = 4300
         row14 = excel_sheet.col(13)
-        row14.width = 80*80
+        row14.width = 2300
         row15 = excel_sheet.col(14)
-        row15.width = 80*80
-
-        # sheet.row(0).height_mismatch = True # 高度可不依赖字体大小定义，定义高度时最好开启此选项
-        # sheet.row(0).height = 40*20
-        # ...
-        # for i in range(7,12): # 也可以通过for循环批量定义高度或宽度
-        #     sheet.row(i).height_mismatch = True
-        #     sheet.row(i).height = 40*20
+        row15.width = 80 * 80
 
         # 写入文件标题
         # excel_sheet.write(0, 0, '序号', xlwt.easyxf('font: height 240, colour_index red,')) # 一个一个写可以这样，也可以如下，适配样式
-        excel_sheet.write(0, 0, '序号', style_heading)
-        excel_sheet.write(0, 1, '机构编码', style_heading)
-        excel_sheet.write(0, 2, '机构名称', style_heading)
-        excel_sheet.write(0, 3, '机构别名', style_heading)
-        excel_sheet.write(0, 4, '省份', style_heading)
-        excel_sheet.write(0, 5, '城市', style_heading)
-        excel_sheet.write(0, 6, '区县', style_heading)
-        excel_sheet.write(0, 7, '详细地址', style_heading)
-        excel_sheet.write(0, 8, '机构类别', style_heading)
-        excel_sheet.write(0, 9, '机构性质', style_heading)
-        excel_sheet.write(0, 10, '机构属性', style_heading)
-        excel_sheet.write(0, 11, '邮政编码', style_heading)
-        excel_sheet.write(0, 12, '机构电话', style_heading)
-        excel_sheet.write(0, 13, '审批状态', style_heading)
-        excel_sheet.write(0, 14, '创建时间', style_heading)
+        excel_sheet.write(0, 0, '序号', head_style_black)  # write方法后面，第一个数字是行数，第二个是列数
+        excel_sheet.write(0, 1, '机构编码', head_style_black)
+        excel_sheet.write(0, 2, '机构名称', head_style_red)
+        excel_sheet.write(0, 3, '机构别名', head_style_black)
+        excel_sheet.write(0, 4, '省份', head_style_red)
+        excel_sheet.write(0, 5, '城市', head_style_red)
+        excel_sheet.write(0, 6, '区县', head_style_black)
+        excel_sheet.write(0, 7, '详细地址', head_style_black)
+        excel_sheet.write(0, 8, '机构类别', head_style_red)
+        excel_sheet.write(0, 9, '机构性质', head_style_red)
+        excel_sheet.write(0, 10, '机构属性', head_style_red)
+        excel_sheet.write(0, 11, '邮政编码', head_style_black)
+        excel_sheet.write(0, 12, '机构电话', head_style_black)
+        excel_sheet.write(0, 13, '审批状态', head_style_black)
+        excel_sheet.write(0, 14, '创建时间', head_style_black)
 
         # 写入数据
-        for i in Institution.objects.all().filter(name=filename):  # 查询要写入的数据
-            excel_sheet.write(0, 1, i.serial_number, style_playback)
-            excel_sheet.write(1, 5, i.institution_code, style_heading)
-            excel_sheet.write(2, 1, i.name, style_time)
-            excel_sheet.write(3, 3, i.alias, style_time)
-            excel_sheet.write(4, 3, i.province, style_time)
-            excel_sheet.write(5, 3, i.city, style_time)
-            excel_sheet.write(6, 3, i.area, style_time)
-            excel_sheet.write(7, 3, i.address, style_time)
-            excel_sheet.write(8, 3, i.institution_type, style_time)
-            excel_sheet.write(9, 3, i.institution_property, style_time)
-            excel_sheet.write(10, 3, i.institution_character, style_time)
-            excel_sheet.write(11, 3, i.post_number, style_time)
-            excel_sheet.write(12, 3, i.phone, style_time)
-            excel_sheet.write(13, 3, i.approve_status, style_time)
-            excel_sheet.write(14, 3, i.create_date, style_time)
+        # for i in Institution.objects.all().filter(name=filename):  # 查询要写入的数据
+        # 因为这里写入数据是根据一行一行添加的，所以要有一个索引，比如用row = 1, 每次循环完row = row + 1
+        # for q in queryset:
+        #     q
+        row = 1
+        for i in Institution.objects.all():
+            excel_sheet.write(row, 0, i.serial_number, body_style_center)
+            excel_sheet.write(row, 1, i.institution_code, body_style_center)
+            excel_sheet.write(row, 2, i.name, body_style)
+            excel_sheet.write(row, 3, i.alias, body_style)
+            excel_sheet.write(row, 4, i.province, body_style_center)
+            excel_sheet.write(row, 5, i.city, body_style_center)
+            excel_sheet.write(row, 6, i.area, body_style_center)
+            excel_sheet.write(row, 7, i.address, body_style)
+            excel_sheet.write(row, 8, i.institution_type, body_style_center)
+
+            # 判断：机构性质
+            if i.institution_property == 1:
+                institution_property_value = '民营医院'
+            elif i.institution_property == 2:
+                institution_property_value = '公立医院'
+            elif i.institution_property == 3:
+                institution_property_value = '专科医院'
+            elif i.institution_property == 4:
+                institution_property_value = '未知'
+            else:
+                institution_property_value = '/'
+            excel_sheet.write(row, 9, institution_property_value, body_style_center)
+
+            # 判断：机构属性
+            if i.institution_character == 1:
+                institution_character_value = 'Common'
+            elif i.institution_character == 2:
+                institution_character_value = 'COE'
+            elif i.institution_character == 3:
+                institution_character_value = 'Focus'
+            else:
+                institution_character_value = '/'
+            excel_sheet.write(row, 10, institution_character_value, body_style_center)
+            excel_sheet.write(row, 11, i.post_number, body_style)
+            excel_sheet.write(row, 12, i.phone, body_style)
+
+            # 判断：审批状态
+            if i.approve_status == 1:
+                approve_status_value = '待审批'
+            elif i.approve_status == 2:
+                approve_status_value = '审批通过'
+            elif i.approve_status == 3:
+                approve_status_value = '审批拒绝'
+            else:
+                approve_status_value = '/'
+            excel_sheet.write(row, 13, approve_status_value, body_style_center)
+
+            # 时区对不上，要转一下格式
+            create_date_value = i.create_date.strftime('%Y年%m月%d日 %H:%M:%S')
+            excel_sheet.write(row, 14, create_date_value, body_style_time)
+            row = row + 1
+
+        # 或者用下面的enumerate的方法，就得列出索引:i, 以及值:v
+        # for i, v in enumerate(Institution.objects.all()):  # 查询要写入的数据
+            # excel_sheet.write(i + 1, 0, v.serial_number, body_style_center)
+            # excel_sheet.write(i + 1, 1, v.institution_code, body_style_center)
+            # excel_sheet.write(i + 1, 2, v.name, body_style)
+            # excel_sheet.write(i + 1, 3, v.alias, body_style)
+            # excel_sheet.write(i + 1, 4, v.province, body_style_center)
+            # excel_sheet.write(i + 1, 5, v.city, body_style_center)
+            # excel_sheet.write(i + 1, 6, v.area, body_style_center)
+            # excel_sheet.write(i + 1, 7, v.address, body_style)
+            # excel_sheet.write(i + 1, 8, v.institution_type, body_style_center)
+            #
+            # # 判断：机构性质
+            # if v.institution_property == 1:
+            #     institution_property_value = '民营医院'
+            # elif v.institution_property == 2:
+            #     institution_property_value = '公立医院'
+            # elif v.institution_property == 3:
+            #     institution_property_value = '专科医院'
+            # elif v.institution_property == 4:
+            #     institution_property_value = '未知'
+            # else:
+            #     institution_property_value = '/'
+            # excel_sheet.write(i + 1, 9, institution_property_value, body_style_center)
+            #
+            # # 判断：机构属性
+            # if v.institution_character == 1:
+            #     institution_character_value = 'Common'
+            # elif v.institution_character == 2:
+            #     institution_character_value = 'COE'
+            # elif v.institution_character == 3:
+            #     institution_character_value = 'Focus'
+            # else:
+            #     institution_character_value = '/'
+            # excel_sheet.write(i + 1, 10, institution_character_value, body_style_center)
+            # excel_sheet.write(i + 1, 11, v.post_number, body_style)
+            # excel_sheet.write(i + 1, 12, v.phone, body_style)
+            #
+            # # 判断：审批状态
+            # if v.approve_status == 1:
+            #     approve_status_value = '待审批'
+            # elif v.approve_status == 2:
+            #     approve_status_value = '审批通过'
+            # elif v.approve_status == 3:
+            #     approve_status_value = '审批拒绝'
+            # else:
+            #     approve_status_value = '/'
+            # excel_sheet.write(i + 1, 13, approve_status_value, body_style_center)
+            #
+            # # 时区对不上，要转一下格式
+            # create_date_value = v.create_date.strftime('%Y年%m月%d日 %H:%M:%S')
+            # excel_sheet.write(i+1, 14, create_date_value, body_style_time)
 
         # 写出到IO
         output = BytesIO()
@@ -291,16 +438,10 @@ class InstitutionAdmin(admin.ModelAdmin):
         response.write(output.getvalue())
         return response
 
-
-        # response = HttpResponse(content_type='application/vnd.ms-excel')
-        # response['Content-Disposition'] = 'attachment;filename=20220117.xlsx'  # 这个表名为何不能用中文
-        # workbook.save(response)
-        # return response
-
     button_export_excel.short_description = '导出Excel'
-    button_export_excel.icon = 'fas fa-audio-description' # 参考https://fontawesome.com
+    button_export_excel.icon = 'fas fa-audio-description'  # 参考https://fontawesome.com
     button_export_excel.type = 'primary'  # 参考https://element.eleme.cn/#/zh-CN/component/button
-    button_export_excel.style = 'color:black;'
+    button_export_excel.style = 'color:white;'
     button_export_excel.confirm = '您确定要导出？'
 
     """上传文件"""
@@ -308,6 +449,7 @@ class InstitutionAdmin(admin.ModelAdmin):
         upload = request.FILES['upload']
         print(upload)
         pass
+
     upload_file.short_description = '文件上传对话框'
     upload_file.type = 'success'
     upload_file.icon = 'el-icon-upload'
@@ -323,6 +465,7 @@ class InstitutionAdmin(admin.ModelAdmin):
     }
 
     """自定义弹框：批量审批"""
+
     def alert_batch_approve(self, request, queryset):
         post = request.POST
         if not post.get('_selected'):
