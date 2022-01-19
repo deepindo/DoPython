@@ -106,7 +106,8 @@ DATABASES = {
         'HOST': 'localhost',
         'POST': '3306',
         'USER': 'root',
-        'PASSWORD': 'Imaioscoder123.'
+        'PASSWORD': 'Imaioscoder123.',
+        'TIME_ZONE': 'Asia/Shanghai',  # 不想设置USE_TZ = False, 那么就得加这个
     }
 }
 

@@ -9,6 +9,20 @@ class PersonAdmin(admin.ModelAdmin):
                     'emergency_contact', 'emergency_phone', 'state_icon', 'operate',)  #  'contact_phone', 'wechat', 'QQ', 'email', 'weibo', 'hobby',
     list_display_links = ('name',)
 
+    # simplePro的功能
+    # fields_options = {
+    #     'id': {
+    #         'fixed': 'left',
+    #         'width': '80px',
+    #         'align': 'center',
+    #         },
+    #     'operate': {
+    #         'fixed': 'right',
+    #         'width': '180px',
+    #         'align': 'left',
+    #     },
+    # }
+
     """boolean类型显示图标的列，可以如下写"""
     # def state_icon(self, obj):
     #     return obj.state == 1
