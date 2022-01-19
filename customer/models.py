@@ -77,4 +77,15 @@ class Customer(models.Model):
         return self.institution.institution_code
     institution_code.short_description = '机构编码'
 
+    # def approve_alert(self):
+    #     parameter_str = 'id={}&status={}'.format(str(self.id), str(self.audit))
+    #     color_code = ''
+    #     btn_str = '<a class="btn btn-xs btn-danger" href="{}">' \
+    #               '<input name="通过审核"' \
+    #               'type="button" id="passButton" ' \
+    #               'title="passButton" value="通过审核">' \
+    #               '</a>'
+    #     return format_html(btn_str, '/pass_audit/?{}'.format(parameter_str))
+
+
 

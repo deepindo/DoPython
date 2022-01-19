@@ -24,6 +24,9 @@ class InstitutionAdmin(admin.ModelAdmin):
                     'institution_property', 'institution_character', 'phone', 'post_number', 'approve_status',
                     'create_date', 'operate_detail',)
 
+    # 编辑页面不显示指定的某些字段, 不生效？
+    # exclude = ('institution_code', )
+
     # 可以点击跳转的字段, 可以设置为None，一个不要
     # list_display_links = None
     list_display_links = ('name',)
@@ -47,25 +50,38 @@ class InstitutionAdmin(admin.ModelAdmin):
     list_filter = (
         'institution_type', 'institution_property', 'institution_character', 'create_date', 'approve_status',)
 
+    # list_editable = ('phone',)
+    date_hierarchy = 'create_date'
+
+    # 水平（垂直）显示过滤器, 用于多对多模型(ManyToMany)
+    # filter_horizontal
+    # filter_vertical
+
+    # 在编辑页面将”保存并添加另一个“ 更改为“保存成新的”，不生效
+    # save_as = True
+    # save_as_continue = False
+    save_on_top = True
+    show_full_result_count = False
+    sortable_by = ('serial_number', 'institution_code', 'name', 'institution_type', 'institution_property', 'institution_character', 'approve_status', 'create_date', )
+
+    # 把外键或者choice字段由下拉框变成单选框, 后面跟的是方向， 感觉会与fieldsets冲突，目前显示的都是水平的，当然一般用不上垂直的
+    # radio_fields = {"institution_character": admin.VERTICAL}
+    radio_fields = {"institution_character": admin.HORIZONTAL}
+
     # 不设置的时候，是降序，最近加的显示在最上面
-    ordering = ('institution_code',)
+    ordering = ('create_date',)
 
     # 每页显示条目数
     list_per_page = 10
-
-    # list_editable = ('phone',)
-    # date_hierarchy = 'create_date'
 
     # 列表顶部全局按钮
     actions = ('button_batch_approve', 'button_export_excel', 'alert_batch_approve', 'upload_file',)
     # ["export_as_csv", ]
 
-    # 以下两个要结合使用， 不生效？
-    actions_on_bottom = True
-    actions_on_top = False
-    # action_form = ["A", "B",] # 这个干嘛的，不能用
-
-    # actions_selection_counter =
+    # 以下两个仅对原django admin生效，对simpleUI无效, 且同时有效，默认actions_on_top为True，两个为True上下都显示
+    # actions_on_bottom = False
+    # actions_on_top = False
+    actions_selection_counter = False  # 选择了多少列表中的多少项，提示文字，默认为True
 
     # 增加Institution页面-展示(展示在同一行的放在一个元祖中, 对于一个元祖中超过两个，那么这多个会相对上下距离较近)
     # fields = (
@@ -74,10 +90,13 @@ class InstitutionAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('基本信息', {
+            'description': '(这是基本信息的描述信息...)',
             'fields': ('institution_code', ('name', 'alias'), ('province', 'city'), ('area', 'address'),
                        ('phone', 'post_number',),)
         }),
-        ('其他信息', {
+        (None, {
+            'classes': ('wide', ),   # collaspe : 将fieldsets折叠起来. wide : 具备更宽的水平空间
+            'description': '(这是其他信息的描述信息...)',
             'fields': (
                 'institution_type', 'institution_property', 'institution_character', 'approve_status', 'create_date',)
         }),
@@ -95,7 +114,7 @@ class InstitutionAdmin(admin.ModelAdmin):
     button_batch_approve.style = 'color:black;'
     button_batch_approve.confirm = '您确定要批量审批选中的机构？'
     button_batch_approve.action_type = 2  # action_type 0=当前页内打开，1=新tab打开，2=浏览器tab打开
-    button_batch_approve.action_url = 'https://www.baidu.com'
+    # button_batch_approve.action_url = 'https://www.baidu.com'
 
     """自定义操作：导出Excel"""
     def button_export_excel(self, request, queryset):

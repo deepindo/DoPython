@@ -13,6 +13,7 @@ class CustomerAdmin(admin.ModelAdmin):
     list_filter = ('institution', 'customer_duty', 'customer_title',)
     search_fields = ('customer_name', 'institution',)
     actions = ('import_excel', 'export_excel_openpyxl', )
+    sortable_by = ('customer_id', 'customer_name', 'institution', 'institution_code', 'create_date', )
 
     # 若是在admin.py页面写，就得这样写，也可以直接在models.py中写，更加方便
     # def institution_code(self, obj):
