@@ -6,10 +6,10 @@ from io import BytesIO
 import datetime
 
 # 下面的暂时不用，或者没有用
-import csv
-from simpleui.admin import AjaxAdmin
-from django.utils import timezone
-import time
+# import csv
+# from simpleui.admin import AjaxAdmin
+# from django.utils import timezone
+# import time
 
 
 class InstitutionAdmin(admin.ModelAdmin):
@@ -84,7 +84,6 @@ class InstitutionAdmin(admin.ModelAdmin):
     )
 
     """自定义操作：批量审批"""
-
     def button_batch_approve(self, request, queryset):
         print('-' * 10)
         print(request)
@@ -97,10 +96,6 @@ class InstitutionAdmin(admin.ModelAdmin):
     button_batch_approve.confirm = '您确定要批量审批选中的机构？'
     button_batch_approve.action_type = 2  # action_type 0=当前页内打开，1=新tab打开，2=浏览器tab打开
     button_batch_approve.action_url = 'https://www.baidu.com'
-
-    """使用openpyxl导出excel"""
-    def export_excel_openpyxl(self, request, queryset):
-        pass
 
     """自定义操作：导出Excel"""
     def button_export_excel(self, request, queryset):
@@ -480,7 +475,6 @@ class InstitutionAdmin(admin.ModelAdmin):
     }
 
     """自定义弹框：批量审批"""
-
     def alert_batch_approve(self, request, queryset):
         post = request.POST
         if not post.get('_selected'):

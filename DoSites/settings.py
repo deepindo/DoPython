@@ -101,13 +101,14 @@ WSGI_APPLICATION = 'DoSites.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'dy_sites_dev',
-        'HOST': 'localhost',
-        'POST': '3306',
-        'USER': 'root',
-        'PASSWORD': 'Imaioscoder123.',
-        'TIME_ZONE': 'Asia/Shanghai',  # 不想设置USE_TZ = False, 那么就得加这个
+        'ENGINE': 'django.db.backends.mysql',  # 数据库引擎配置
+        'NAME': 'dy_sites_dev',  # 数据库的名字
+        'HOST': 'localhost',  # 数据库服务器的IP地址（本机可以写localhost或127.0.0.1）
+        'POST': '3306',  # 启动MySQL服务的端口号
+        'USER': 'root',  # 数据库用户名
+        'PASSWORD': 'Imaioscoder123.',  # 数据库口令
+        'CHARSET': 'utf8',  # 数据库使用的字符集
+        'TIME_ZONE': 'Asia/Shanghai',  # # 数据库时间日期的时区设定, 不想设置USE_TZ = False, 那么就得加这个
     }
 }
 
@@ -147,7 +148,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # 如果克隆报错提示找不到静态目录，请先在settings.py指定静态目录， clone成功后，注释掉，因为以上面STATICFILES_DIRS冲突，导致css不起效，影响显示
+
+# 如果克隆报错提示找不到静态目录，请先在settings.py指定静态目录，
+# clone成功后，注释掉，因为以上面STATICFILES_DIRS冲突，导致css不起效，影响显示
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -238,7 +242,7 @@ SIMPLEUI_CONFIG = {
         'icon': 'fa fa-desktop',
         'models': [{
             'name': time.time(),
-            'url': 'http://baidu.com',
+            'url': 'https://baidu.com',
             'icon': 'far fa-surprise'
         }]
     }]
