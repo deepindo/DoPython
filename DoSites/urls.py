@@ -31,6 +31,7 @@ urlpatterns = [
     path('service/', include('service.urls')),    # 服务支持
     path('science/', include('science.urls')),    # 科研基地
     path('contact/', include('contact.urls')),    # 人才招聘
+    path('api/', include('institution.urls')),  # 机构信息-API
     # path('institution-admin/', institution_admin_site.urls),
     # path('api/institution1/', institution_list),
     # path('ueditor/', include('DjangoUeditor.urls')),   # 编辑
